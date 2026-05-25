@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"/Users/aidarkanybekov/Documents/Мередиан/\" && ls -la \"/Users/aidarkanybekov/Downloads/\" | grep -E \"\\(admin|client|login|operator\\)\")",
+      "Bash(cp \"/Users/aidarkanybekov/Downloads/login \\(2\\) \\(2\\).html\" \"/Users/aidarkanybekov/Documents/Мередиан/_login_src.html\")",
+      "Bash(cp \"/Users/aidarkanybekov/Downloads/client \\(2\\) \\(2\\).html\" \"/Users/aidarkanybekov/Documents/Мередиан/_client_src.html\")",
+      "Bash(cp \"/Users/aidarkanybekov/Downloads/operator \\(1\\) \\(2\\).html\" \"/Users/aidarkanybekov/Documents/Мередиан/_operator_src.html\")",
+      "Bash(cp \"/Users/aidarkanybekov/Downloads/admin \\(3\\).html\" \"/Users/aidarkanybekov/Documents/Мередиан/_admin_src.html\")",
+      "Bash(python3)",
+      "Bash(node -e \"require\\('better-sqlite3'\\); console.log\\('better-sqlite3 loads OK, node:', process.version\\)\")",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(/opt/homebrew/bin/node --version)",
+      "Bash(/opt/homebrew/bin/node -e \"require\\('better-sqlite3'\\); console.log\\('better-sqlite3 OK on Node', process.version\\)\")",
+      "Bash(PATH=/opt/homebrew/bin:__TRACKED_VAR__ /opt/homebrew/bin/node server.js)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} → %{url_effective}\\\\n\" -L http://localhost:3000/)",
+      "Bash(curl -s -I http://localhost:3000/login)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"admin\",\"password\":\"1234\"}' -c /tmp/meridian-cookies.txt)",
+      "Bash(curl -s -b /tmp/meridian-cookies.txt http://localhost:3000/api/auth/me)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"op1\",\"password\":\"1234\"}' -c /tmp/m.txt)",
+      "Bash(curl -s -X POST http://localhost:3000/api/trucks -H 'Content-Type: application/json' -b /tmp/m.txt -d '{\"number\":\"01KG TEST 001\",\"customs\":\"Кант\",\"client\":\"ОсОО Тест\"}')",
+      "Bash(curl -s http://localhost:3000/api/trucks -b /tmp/m.txt)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'{len\\(d\\)} заявок:', [\\(t[\\\\\"id\\\\\"], t[\\\\\"number\\\\\"]\\) for t in d]\\)\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"cl1\",\"password\":\"1234\"}' -c /tmp/m2.txt)",
+      "Bash(curl -s -X POST http://localhost:3000/api/trucks -H 'Content-Type: application/json' -b /tmp/m2.txt -d '{\"number\":\"05KG CLIENT 99\",\"customs\":\"Балыкчы\"}')",
+      "Bash(curl -s http://localhost:3000/api/trucks -b /tmp/m2.txt)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'{len\\(d\\)} заявок \\(только свои\\):', [\\(t[\\\\\"id\\\\\"], t[\\\\\"number\\\\\"], t[\\\\\"client\\\\\"]\\) for t in d]\\)\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/trucks -H 'Content-Type: application/json' -b /tmp/m.txt -d '{\"number\":\"NEW STAGE TEST\",\"customs\":\"Кант\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"admin\",\"password\":\"1234\"}' -c /tmp/a.txt)",
+      "Bash(curl -s -X POST http://localhost:3000/api/users -H 'Content-Type: application/json' -b /tmp/a.txt -d '{\"login\":\"testact\",\"password\":\"1234\",\"roleId\":\"role_operator\"}')",
+      "Bash(PATH=/opt/homebrew/bin:__TRACKED_VAR__ pkill -f 'node server.js')",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"op1\",\"password\":\"1234\"}' -c /tmp/op.txt)",
+      "Bash(curl -s -X POST http://localhost:3000/api/trucks -H 'Content-Type: application/json' -b /tmp/op.txt -d '{\"number\":\"ASN TEST\",\"customs\":\"Кант\"}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(' assigned:', d.get\\('assignedOperatorLogin'\\)\\)\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"login\":\"admin\",\"password\":\"1234\"}' -c /tmp/ad.txt)",
+      "Bash(/opt/homebrew/bin/node -e \"console.log\\(Date.now\\(\\) - 30*86400000\\)\")",
+      "Bash(/opt/homebrew/bin/node -e \"console.log\\(Date.now\\(\\) + 86400000\\)\")",
+      "Bash(curl -s 'http://localhost:3000/api/reports/summary?from=__TRACKED_VAR__&to=__TRACKED_VAR__' -b /tmp/ad.txt)",
+      "Bash(curl -s 'http://localhost:3000/api/reports/trucks?from=__TRACKED_VAR__&to=__TRACKED_VAR__&kind=customs&value=%D0%9A%D0%B0%D0%BD%D1%82' -b /tmp/ad.txt)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}

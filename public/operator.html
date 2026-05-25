@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<title>Центр оформления — ОсОО Меридиан</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --white:        #ffffff;
+    --bg:           #fafafa;
+    --surface:      #ffffff;
+    --surface-2:    #f4f5f7;
+    --border:       #e6e8ec;
+    --border-strong:#d4d7dd;
+
+    --text:         #0a0a0a;
+    --text-2:       #4a4f57;
+    --text-3:       #8a909a;
+
+    --blue:         #1d508c;
+    --blue-hover:   #143f6d;
+    --blue-soft:    #ecf2fa;
+    --blue-line:    #bdd2e7;
+
+    --green:        #0a7f44;
+    --green-hover:  #086636;
+    --green-soft:   #e6f5ec;
+    --green-line:   #c1e3cf;
+
+    --red:          #c5253a;
+    --red-strong:   #a51b2d;
+    --red-soft:     #fce9ec;
+    --red-line:     #f1c5cd;
+
+    --radius-sm: 6px;
+    --radius:    10px;
+    --radius-lg: 14px;
+
+    --shadow-sm: 0 1px 2px rgba(15,20,30,0.04);
+    --shadow:    0 1px 3px rgba(15,20,30,0.06), 0 6px 16px rgba(15,20,30,0.05);
+    --shadow-lg: 0 10px 40px rgba(15,20,30,0.12);
+
+    --f-sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-mono: "Geist Mono", ui-monospace, monospace;
+
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection { background: var(--blue); color: var(--white); }
+  button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+  input, select, textarea { font: inherit; color: inherit; }
+
+  /* ============ HEADER ============ */
+  .app-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 30;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .brand-mark img {
+    height: 100%;
+    width: auto;
+    display: block;
+  }
+  .brand-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .brand-name { font-size: 14.5px; font-weight: 500; letter-spacing: -0.01em; }
+  .brand-name span {
+    margin-left: 8px; padding-left: 10px;
+    border-left: 1px solid var(--border);
+    color: var(--text-3); font-weight: 400;
+  }
+
+  .user-block { display: flex; align-items: center; gap: 14px; }
+  .user-info { text-align: right; line-height: 1.3; }
+  .user-name { font-size: 13.5px; font-weight: 500; }
+  .user-role { font-size: 12px; color: var(--text-3); }
+  .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px;
+  }
+  .logout-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .logout-btn:hover { background: var(--surface-2); color: var(--text); }
+  .logout-btn svg { width: 18px; height: 18px; }
+
+  /* ============ MAIN ============ */
+  .app-main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 28px 32px;
+  }
+
+  .page-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; margin-bottom: 24px;
+  }
+  .page-header h1 {
+    font-size: 28px; font-weight: 600; letter-spacing: -0.025em;
+    line-height: 1.1; margin-bottom: 6px;
+  }
+  .page-header .subtitle { color: var(--text-2); font-size: 14.5px; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.05s;
+    white-space: nowrap;
+  }
+  .btn:active:not(:disabled) { transform: translateY(0.5px); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn:disabled { cursor: not-allowed; opacity: 0.55; }
+
+  .btn-primary { background: var(--blue); color: var(--white); }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-hover); }
+
+  .btn-secondary {
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--surface-2); border-color: var(--text-3); }
+
+  .btn-danger {
+    background: var(--surface);
+    color: var(--red);
+    border: 1px solid var(--red-line);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--red-soft); }
+
+  .btn-success {
+    background: var(--surface);
+    color: var(--green);
+    border: 1px solid var(--green-line);
+  }
+  .btn-success:hover:not(:disabled) { background: var(--green-soft); }
+
+  .btn-sm { height: 32px; padding: 0 12px; font-size: 13px; }
+
+  /* ============ STATS ============ */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    transition: border-color 0.15s;
+  }
+  .stat-card:hover { border-color: var(--border-strong); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .stat-value {
+    font-size: 26px; font-weight: 600;
+    letter-spacing: -0.03em; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-card.is-warning .stat-value { color: var(--red); }
+  .stat-card.is-success .stat-value { color: var(--green); }
+  .stat-card.is-blue .stat-value { color: var(--blue); }
+
+  /* ============ FILTER PILLS (большой фильтр) ============ */
+  .pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .pill:hover { border-color: var(--text-3); }
+  .pill.is-active {
+    background: var(--text);
+    color: var(--white);
+    border-color: var(--text);
+  }
+  .pill-count {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    background: var(--surface-2);
+    padding: 1.5px 8px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+  .pill-count.urgent {
+    background: var(--red-soft);
+    color: var(--red);
+  }
+  .pill.is-active .pill-count {
+    background: rgba(255,255,255,0.18);
+    color: var(--white);
+  }
+  .pill.is-active .pill-count.urgent {
+    background: rgba(255,255,255,0.22);
+    color: var(--white);
+  }
+
+  /* ============ AUX FILTERS ============ */
+  .aux-filters {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .search-input {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    max-width: 340px;
+  }
+  .search-input svg {
+    position: absolute;
+    left: 12px;
+    top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px;
+    color: var(--text-3);
+    pointer-events: none;
+  }
+  .search-input input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px 0 38px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+  }
+  .search-input input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+
+  .filter-select {
+    height: 38px;
+    padding: 0 32px 0 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a909a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    outline: none;
+    min-width: 160px;
+  }
+  .filter-select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+
+  /* ============ TRUCKS LIST ============ */
+  .trucks-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .list-head {
+    display: grid;
+    grid-template-columns: 200px 110px 1fr 130px 110px 60px;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .truck-row {
+    display: grid;
+    grid-template-columns: 200px 110px 1fr 130px 110px 60px;
+    gap: 16px;
+    padding: 16px 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .truck-row:last-child { border-bottom: none; }
+  .truck-row:hover { background: var(--surface-2); }
+  .truck-row.is-problem { border-left: 3px solid var(--red); padding-left: 17px; }
+  .truck-row.is-released { opacity: 0.85; }
+
+  .truck-number {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .truck-id {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .badge-active   { background: var(--blue-soft);  color: var(--blue); }
+  .badge-problem  { background: var(--red-soft);   color: var(--red); }
+  .badge-released { background: var(--green-soft); color: var(--green); }
+  .badge-problem .badge-dot { animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* mini progress */
+  .mini-progress { display: flex; align-items: center; gap: 12px; }
+  .mini-progress-stages { display: flex; align-items: center; flex: 0 0 auto; }
+  .mini-stage {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .mini-stage::after {
+    content: "";
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border-strong);
+    transition: all 0.2s;
+  }
+  .mini-stage.done::after         { background: var(--blue);  border-color: var(--blue); }
+  .mini-stage.released-dot::after { background: var(--green); border-color: var(--green); }
+  .mini-stage.current::after {
+    background: var(--blue); border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.18);
+    width: 10px; height: 10px;
+  }
+  .mini-stage.problem::after {
+    background: var(--red); border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.18);
+    width: 10px; height: 10px;
+  }
+  .mini-stage-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    min-width: 12px;
+    max-width: 24px;
+  }
+  .mini-stage-line.done           { background: var(--blue); }
+  .mini-stage-line.released-line  { background: var(--green); }
+
+  .stage-name {
+    font-size: 13.5px;
+    color: var(--text-2);
+    font-weight: 500;
+  }
+  .stage-name strong { color: var(--text); font-weight: 500; }
+  .truck-row.is-problem .stage-name strong { color: var(--red-strong); }
+
+  .time-on-stage {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .time-on-stage .label {
+    font-size: 11px;
+    color: var(--text-3);
+    display: block;
+    margin-bottom: 2px;
+    font-family: var(--f-sans);
+    letter-spacing: -0.005em;
+  }
+  .truck-row.is-problem .time-on-stage strong { color: var(--red); }
+
+  .progress-cell { display: flex; align-items: center; gap: 8px; }
+  .progress-bar {
+    width: 60px;
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+  .progress-bar-fill.done    { background: var(--green); }
+  .progress-bar-fill.problem { background: var(--red); }
+  .progress-text {
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+    min-width: 32px;
+  }
+
+  .row-arrow {
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .truck-row:hover .row-arrow { color: var(--blue); transform: translateX(2px); }
+
+  .empty-state {
+    padding: 64px 20px;
+    text-align: center;
+    color: var(--text-3);
+  }
+  .empty-state-icon { margin-bottom: 12px; opacity: 0.5; }
+  .empty-state h3 { font-size: 16px; color: var(--text-2); margin-bottom: 4px; }
+
+  /* ============ SLIDE-OVER (DETAIL PANEL) ============ */
+  .slide-over {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; justify-content: flex-end;
+    pointer-events: none; visibility: hidden;
+  }
+  .slide-over.is-open { pointer-events: auto; visibility: visible; }
+  .slide-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,20,30,0.4);
+    backdrop-filter: blur(2px);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .slide-over.is-open .slide-backdrop { opacity: 1; }
+  .slide-content {
+    position: relative;
+    width: 560px;
+    max-width: 100%;
+    background: var(--surface);
+    height: 100%;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+  }
+  .slide-over.is-open .slide-content { transform: translateX(0); }
+
+  .slide-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: sticky; top: 0;
+    background: var(--surface);
+    z-index: 2;
+  }
+  .slide-title-block { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .slide-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-family: var(--f-mono);
+  }
+  .slide-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--text-3);
+    margin-right: 8px;
+  }
+  .slide-close {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .slide-close:hover { background: var(--surface-2); color: var(--text); }
+
+  .slide-body { padding: 22px 24px 24px; flex: 1; }
+
+  .panel-section { margin-bottom: 24px; }
+  .panel-section:last-child { margin-bottom: 0; }
+  .panel-section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 10px;
+  }
+
+  /* HERO time */
+  .hero-time {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    background: var(--text);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .hero-time.problem  { background: var(--red); }
+  .hero-time.released { background: var(--green); }
+  .hero-time-cell { min-width: 0; }
+  .hero-time-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .hero-time-value {
+    font-family: var(--f-mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-time-divider { background: rgba(255,255,255,0.18); width: 1px; margin: 4px 16px; }
+
+  /* current stage */
+  .current-stage {
+    background: var(--blue-soft);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .current-stage.released { background: var(--green-soft); border-color: var(--green-line); }
+  .current-stage.problem  { background: var(--red-soft);   border-color: var(--red-line); }
+  .current-stage-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--blue);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .current-stage.released .current-stage-label { color: var(--green); }
+  .current-stage.problem  .current-stage-label { color: var(--red); }
+  .current-stage-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* progress block */
+  .progress-block { margin-bottom: 18px; }
+  .progress-block-head {
+    display: flex; justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px; color: var(--text-3); font-weight: 500;
+    letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .progress-block-percent {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .progress-block-bar { height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+  .progress-block-fill { height: 100%; background: var(--blue); border-radius: 999px; transition: width 0.3s ease; }
+  .progress-block-fill.done    { background: var(--green); }
+  .progress-block-fill.problem { background: var(--red); }
+
+  /* INFO grid + inline edit */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .info-item {
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .info-label {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .info-label .req { color: var(--red); }
+  .info-value {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .info-value.mono  { font-family: var(--f-mono); }
+  .info-value.empty { color: var(--text-3); font-weight: 400; font-style: italic; }
+
+  /* inline editable input — выглядит как текст, но редактируется */
+  .info-edit-input {
+    font-family: var(--f-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 3px 6px;
+    margin-left: -7px;
+    border-radius: 4px;
+    width: calc(100% + 14px);
+    outline: none;
+    transition: all 0.15s;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+  }
+  .info-edit-input::-webkit-outer-spin-button,
+  .info-edit-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  .info-edit-input:hover {
+    border-color: var(--border-strong);
+    background: var(--white);
+  }
+  .info-edit-input:focus {
+    border-color: var(--blue);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .info-edit-input.has-error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.10);
+  }
+  .info-edit-saved {
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .info-edit-saved.is-shown { opacity: 1; }
+
+  /* FILE AREA — пересобрана */
+  .file-block { display: flex; flex-direction: column; gap: 8px; }
+  .file-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px dashed var(--border-strong);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .file-area:hover {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+  }
+  .file-area-icon {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: all 0.15s;
+  }
+  .file-area:hover .file-area-icon {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .file-area-text {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.3;
+  }
+  .file-area-text strong { color: var(--blue); font-weight: 600; }
+  .file-area-formats {
+    font-size: 11px;
+    color: var(--text-3);
+    font-family: var(--f-mono);
+    letter-spacing: 0.05em;
+  }
+
+  .file-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+  }
+  .file-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 13.5px; font-weight: 500; word-break: break-all; }
+  .file-meta { font-size: 11.5px; color: var(--text-3); }
+  .file-remove {
+    color: var(--text-3);
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .file-remove:hover { background: var(--red-soft); color: var(--red); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px; bottom: 8px;
+    width: 1.5px;
+    background: var(--border-strong);
+  }
+  .tl-item { position: relative; padding-bottom: 22px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -26px; top: 1px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--border-strong);
+    display: grid; place-items: center;
+  }
+  .tl-item.done .tl-dot     { background: var(--blue);  border-color: var(--blue); }
+  .tl-item.released .tl-dot { background: var(--green); border-color: var(--green); }
+  .tl-item.done .tl-dot::after,
+  .tl-item.released .tl-dot::after {
+    content: "";
+    width: 7px; height: 4px;
+    border: 1.8px solid var(--white);
+    border-top: none; border-right: none;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .tl-item.current .tl-dot {
+    background: var(--white);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(29,80,140,0.16);
+  }
+  .tl-item.current .tl-dot::after {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  .tl-item.problem .tl-dot {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(197,37,58,0.16);
+  }
+  .tl-item.problem .tl-dot::after {
+    content: "!";
+    color: var(--white);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .tl-stage-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .tl-times {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    align-items: baseline;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .tl-times .label {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tl-times .val {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2);
+    font-size: 13px;
+  }
+  .tl-status {
+    font-size: 11.5px;
+    color: var(--text-3);
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+  .tl-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+  .tl-duration svg { width: 10px; height: 10px; }
+  .tl-item.problem  .tl-duration { background: var(--red-soft);   color: var(--red); }
+  .tl-item.released .tl-duration { background: var(--green-soft); color: var(--green); }
+
+  .tl-problem {
+    margin-top: 8px;
+    background: var(--red-soft);
+    border: 1px solid var(--red-line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .tl-problem.resolved {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text-2);
+  }
+  .tl-problem-head {
+    font-size: 10.5px;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tl-problem-head svg { width: 11px; height: 11px; }
+  .tl-problem.resolved .tl-problem-head { color: var(--text-3); }
+  .tl-problem.resolved .tl-problem-head .resolved-tag {
+    margin-left: auto;
+    background: var(--green-soft);
+    color: var(--green);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+  .tl-problem-time {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 6px;
+  }
+
+  /* slide footer (action buttons) */
+  .slide-footer {
+    padding: 14px 24px calc(14px + var(--safe-bottom));
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .slide-footer .btn { flex: 1; min-width: 160px; }
+
+  /* ============ MODAL ============ */
+  .modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; visibility: hidden;
+    padding: 20px;
+  }
+  .modal.is-open { pointer-events: auto; visibility: visible; }
+  .modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,20,30,0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .modal.is-open .modal-backdrop { opacity: 1; }
+  .modal-card {
+    position: relative;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.96) translateY(8px); opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal.is-open .modal-card { transform: scale(1) translateY(0); opacity: 1; }
+  .modal-header { padding: 20px 24px 4px; }
+  .modal-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .modal-subtitle { font-size: 13.5px; color: var(--text-2); margin-top: 4px; }
+  .modal-body { padding: 14px 24px 18px; flex: 1; overflow-y: auto; }
+  .modal-footer {
+    padding: 14px 24px 20px;
+    display: flex; gap: 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .modal-footer .btn { flex: 1; }
+
+  .form-field { margin-bottom: 14px; }
+  .form-field:last-child { margin-bottom: 0; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .form-label .req { color: var(--red); margin-left: 2px; }
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 0 12px;
+    height: 42px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+  .form-textarea {
+    height: auto; padding: 10px 12px;
+    min-height: 96px; resize: vertical;
+  }
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .form-input.has-error,
+  .form-textarea.has-error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.10);
+  }
+  .form-error { color: var(--red); font-size: 12.5px; margin-top: 6px; }
+  .form-help  { color: var(--text-3); font-size: 12.5px; margin-top: 6px; }
+  .form-input.mono { font-family: var(--f-mono); }
+
+  /* ============ COMBOBOX (для клиента) ============ */
+  .combobox { position: relative; }
+  .combobox-input { padding-right: 40px; }
+  .combobox-toggle {
+    position: absolute;
+    right: 6px; top: 50%; transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .combobox-toggle:hover { background: var(--surface-2); color: var(--text); }
+  .combobox-toggle svg { width: 14px; height: 14px; transition: transform 0.2s; }
+  .combobox.is-open .combobox-toggle svg { transform: rotate(180deg); }
+  .combobox-menu {
+    position: absolute;
+    left: 0; right: 0; top: calc(100% + 4px);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 250;
+    padding: 4px;
+  }
+  .combobox:not(.is-open) .combobox-menu { display: none; }
+  .combobox-option {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.1s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .combobox-option:hover,
+  .combobox-option.is-highlighted { background: var(--surface-2); }
+  .combobox-option-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .combobox-option.is-add {
+    color: var(--blue);
+    font-weight: 500;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+    padding-top: 10px;
+  }
+  .combobox-option.is-add .combobox-option-icon {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .combobox-empty {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text-3);
+    font-style: italic;
+  }
+
+  /* TOAST */
+  .toast-stack {
+    position: fixed;
+    bottom: calc(20px + var(--safe-bottom));
+    right: 20px;
+    z-index: 300;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--text);
+    color: var(--white);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), toastOut 0.3s 3.5s forwards;
+    max-width: 320px;
+  }
+  .toast.success { background: var(--green); }
+  .toast.error   { background: var(--red); }
+  @keyframes toastIn  { from { transform: translateX(20px); opacity: 0; } }
+  @keyframes toastOut { to   { transform: translateX(20px); opacity: 0; } }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1100px) {
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .list-head, .truck-row {
+      grid-template-columns: 180px 110px 1fr 110px 90px 40px;
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .app-header { padding: 0 16px; height: 56px; }
+    .app-main { padding: 20px 16px 32px; }
+    .page-header { flex-direction: column; align-items: stretch; gap: 12px; }
+    .page-header h1 { font-size: 24px; }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .list-head { display: none; }
+
+    .truck-row {
+      grid-template-columns: 1fr auto;
+      gap: 10px 12px;
+      padding: 14px;
+      grid-template-areas:
+        "number badge"
+        "stage stage"
+        "progress time"
+        "minip minip";
+    }
+    .truck-row.is-problem { padding-left: 11px; }
+    .truck-row .truck-number-block { grid-area: number; }
+    .truck-row .badge-cell { grid-area: badge; align-self: start; }
+    .truck-row .stage-name { grid-area: stage; font-size: 14px; }
+    .truck-row .progress-cell { grid-area: progress; }
+    .truck-row .time-on-stage { grid-area: time; text-align: right; }
+    .truck-row .mini-progress-cell { grid-area: minip; padding-top: 4px; border-top: 1px solid var(--border); margin-top: 2px; }
+    .truck-row .row-arrow { display: none; }
+
+    .brand-mark { height: 30px; }
+    .brand-divider { display: none; }
+    .brand-name span { display: none; }
+    .user-info { display: none; }
+    .slide-content { width: 100%; }
+
+    .aux-filters { gap: 8px; }
+    .search-input { max-width: 100%; }
+    .filter-select { flex: 1; min-width: 140px; }
+  }
+
+  @media (max-width: 480px) {
+    .app-header { padding: 0 14px; }
+    .app-main { padding: 16px 12px 28px; }
+    .info-grid { grid-template-columns: 1fr; }
+    .modal-card { max-height: calc(100vh - 32px); }
+    .hero-time { padding: 14px 16px; }
+    .hero-time-value { font-size: 18px; }
+  }
+
+  /* entrance */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .stat-card { animation: fadeUp 0.4s both; }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.10s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.20s; }
+  .stat-card:nth-child(5) { animation-delay: 0.25s; }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <img src="data:image/jpeg;base64,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" alt="ОсОО Меридиан — Таможенный брокер" />
+    </div>
+  </div>
+
+  <div class="user-block">
+    <div class="user-info">
+      <div class="user-name" id="userName">—</div>
+      <div class="user-role" id="userRole">—</div>
+    </div>
+    <div class="user-avatar" id="userAvatar">—</div>
+    <button class="logout-btn" id="logoutBtn" title="Выйти">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="app-main">
+
+  <div class="page-header">
+    <div>
+      <h1>Все фуры</h1>
+      <p class="subtitle">Управление и контроль статусов прохождения</p>
+    </div>
+    <button class="btn btn-primary" id="newTruckBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Новая заявка
+    </button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card is-blue">
+      <div class="stat-label">Активных всего</div>
+      <div class="stat-value" id="statActive">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">На досмотре</div>
+      <div class="stat-value" id="statCustoms">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">На декларации</div>
+      <div class="stat-value" id="statDeclaration">—</div>
+    </div>
+    <div class="stat-card is-warning">
+      <div class="stat-label">С проблемами</div>
+      <div class="stat-value" id="statProblems">—</div>
+    </div>
+    <div class="stat-card is-success">
+      <div class="stat-label">Выпущено сегодня</div>
+      <div class="stat-value" id="statReleased">—</div>
+    </div>
+  </div>
+
+  <!-- Большой сегментированный фильтр -->
+  <div class="pills-row">
+    <button class="pill is-active" data-filter="in_progress">
+      В работе <span class="pill-count" id="pillInProgress">0</span>
+    </button>
+    <button class="pill" data-filter="problem">
+      С проблемой <span class="pill-count" id="pillProblem">0</span>
+    </button>
+    <button class="pill" data-filter="released">
+      Выпущенные <span class="pill-count" id="pillReleased">0</span>
+    </button>
+    <button class="pill" data-filter="all">
+      Все <span class="pill-count" id="pillAll">0</span>
+    </button>
+  </div>
+
+  <!-- Вспомогательные фильтры -->
+  <div class="aux-filters">
+    <div class="search-input">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Поиск по номеру или ID..." />
+    </div>
+    <select class="filter-select" id="stageFilter">
+      <option value="">Все этапы</option>
+      <option value="0">Ожидает</option>
+      <option value="1">Заполнение</option>
+      <option value="2">Предв. готова</option>
+      <option value="3">Граница пройдена</option>
+      <option value="4">Прибытие</option>
+      <option value="5">Отметка товаров</option>
+      <option value="6">ДВХ — досмотр</option>
+      <option value="7">Декларация</option>
+      <option value="8">Подача документов</option>
+      <option value="9">Выпуск</option>
+    </select>
+    <select class="filter-select" id="clientFilter">
+      <option value="">Все клиенты</option>
+    </select>
+    <select class="filter-select" id="customsFilter">
+      <option value="">Все таможни</option>
+      <option value="Кара-Булак">Кара-Булак</option>
+      <option value="Кант">Кант</option>
+      <option value="Балыкчы">Балыкчы</option>
+      <option value="Манас">Манас</option>
+    </select>
+  </div>
+
+  <div class="trucks-list">
+    <div class="list-head">
+      <div>Номер фуры</div>
+      <div>Статус</div>
+      <div>Этап</div>
+      <div>Время на этапе</div>
+      <div>Прогресс</div>
+      <div></div>
+    </div>
+    <div id="trucksList"></div>
+  </div>
+
+</main>
+
+<!-- ============ SLIDE-OVER ============ -->
+<div class="slide-over" id="detailPanel">
+  <div class="slide-backdrop" data-close></div>
+  <div class="slide-content" id="detailContent"></div>
+</div>
+
+<!-- ============ MODAL: NEW TRUCK ============ -->
+<div class="modal" id="newTruckModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Новая заявка</div>
+      <div class="modal-subtitle">Регистрация заявки на оформление</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="truckNumberInput">Номер машины <span class="req">*</span></label>
+        <input class="form-input mono" type="text" id="truckNumberInput" placeholder="напр. 01KG 234 ABC" autocomplete="off" />
+        <div class="form-help">Среди активных заявок не должно быть двух с одинаковым номером машины.</div>
+        <div class="form-error" id="truckNumberError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="customsSelect">Таможня <span class="req">*</span></label>
+        <select class="form-input" id="customsSelect">
+          <option value="">Выберите таможню</option>
+          <option value="Кара-Булак">Кара-Булак</option>
+          <option value="Кант">Кант</option>
+          <option value="Балыкчы">Балыкчы</option>
+          <option value="Манас">Манас</option>
+        </select>
+        <div class="form-error" id="customsError" style="display:none;">Выберите таможню</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="clientComboInput">Клиент</label>
+        <div class="combobox" id="clientCombo">
+          <input class="form-input combobox-input" type="text" id="clientComboInput" placeholder="Выберите клиента или введите нового" autocomplete="off" />
+          <button class="combobox-toggle" type="button" id="clientComboToggle" aria-label="Открыть список">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="combobox-menu" id="clientComboMenu"></div>
+        </div>
+        <div class="form-help">Если клиента нет в списке — впишите название, он будет создан автоматически.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitNewTruck">Создать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: REPORT PROBLEM ============ -->
+<div class="modal" id="problemModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Сообщить о проблеме</div>
+      <div class="modal-subtitle" id="problemModalSubtitle">—</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="problemReason">Причина <span class="req">*</span></label>
+        <textarea class="form-textarea" id="problemReason" placeholder="Опишите, что произошло на текущем этапе..."></textarea>
+        <div class="form-error" id="problemError" style="display:none;">Поле обязательно для заполнения.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-danger" id="submitProblem">Зафиксировать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: RESOLVE PROBLEM ============ -->
+<div class="modal" id="resolveModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Снять отметку «Проблема»</div>
+      <div class="modal-subtitle" id="resolveModalSubtitle">—</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="resolveNote">Комментарий о решении <span style="color:var(--text-3)">— необязательно</span></label>
+        <textarea class="form-textarea" id="resolveNote" placeholder="Например: документы получены, проверка пройдена..."></textarea>
+      </div>
+      <div class="form-help" style="margin-top:0">Проблема будет помечена как решённая, но останется в истории фуры. Фура вернётся в статус «В работе».</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-success" id="submitResolve">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Снять метку
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="/assets/api.js"></script>
+<script>
+// ============================================================
+// STAGES
+// ============================================================
+// Этапы сжаты с 10 до 8: убраны «Проехала границу» и «Количество товаров отмечено».
+// На «Прибытие на ВЗТК» требуется заполнить goodsCount + weight + sumAmount.
+const STAGES = [
+  { key: 'pending',         label: 'Ожидает обработки',                        short: 'Ожидает'           },
+  { key: 'prelim_filling',  label: 'Заполняется предварительная информация',   short: 'Заполнение'        },
+  { key: 'prelim_done',     label: 'Предварительная информация завершена',     short: 'Предв. готова'     },
+  { key: 'arrived',         label: 'Прибытие на ВЗТК',                         short: 'Прибытие'          },
+  { key: 'customs',         label: 'ДВХ открыт — досмотр в таможне',           short: 'ДВХ — досмотр'     },
+  { key: 'declaration',     label: 'Печать декларации / ответ на хранение',    short: 'Декларация'        },
+  { key: 'docs_submitted',  label: 'Документы поданы в таможню',               short: 'Подача документов' },
+  { key: 'released',        label: 'Выпуск фуры',                              short: 'Выпущена'          },
+];
+const TOTAL_STAGES = STAGES.length; // = 8
+const ARRIVED_STAGE = 3;
+
+// ============================================================
+// CUSTOMS OFFICES + CLIENTS — подгружаются с сервера
+// ============================================================
+let CUSTOMS_OFFICES = ['Кара-Булак', 'Кант', 'Балыкчы', 'Манас'];
+let clients = [];
+
+// ============================================================
+// DATA — заполняется из API
+// ============================================================
+let trucks = [];
+
+// ============================================================
+// HELPERS
+// ============================================================
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formatDateTime(ts) {
+  const d = new Date(ts);
+  const today = new Date();
+  const isToday = d.toDateString() === today.toDateString();
+  const yest = new Date(); yest.setDate(yest.getDate() - 1);
+  const isYesterday = d.toDateString() === yest.toDateString();
+  const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (isToday) return `Сегодня, ${time}`;
+  if (isYesterday) return `Вчера, ${time}`;
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}, ${time}`;
+}
+
+function formatDuration(ms) {
+  if (ms < 0) ms = 0;
+  if (ms < 60*1000) return `${Math.floor(ms/1000)}с`;
+  const totalMin = Math.floor(ms / (60*1000));
+  const days = Math.floor(totalMin / (60*24));
+  const hours = Math.floor((totalMin % (60*24)) / 60);
+  const mins = totalMin % 60;
+  if (days > 0) return `${days}д ${hours}ч`;
+  if (hours > 0) return `${hours}ч ${mins}м`;
+  return `${mins}м`;
+}
+
+function getCurrentStageEntry(t) { return t.stageHistory.find(s => s.exitedAt === null); }
+function getStageDuration(s) { const exit = s.exitedAt ?? Date.now(); return exit - s.enteredAt; }
+function getTotalDuration(t) {
+  if (t.isReleased && t.releasedAt) return t.releasedAt - t.createdAt;
+  return Date.now() - t.createdAt;
+}
+function getProgressPercent(t) {
+  if (t.isReleased) return 100;
+  return Math.round((t.currentStageIndex / (TOTAL_STAGES - 1)) * 100);
+}
+function hasActiveProblem(t) {
+  if (t.isReleased) return false;
+  return t.problems.some(p => p.stageIndex === t.currentStageIndex && !p.resolvedAt);
+}
+
+// ============================================================
+// STATE / FILTERS
+// ============================================================
+let activeFilter = 'in_progress'; // default
+let filters = {
+  search: '',
+  stage: '',
+  client: '',
+  customs: '',
+};
+let activeTruckId = null;
+let currentUserId = null;   // login id текущего оператора, нужен для подсветки «(вы)»
+
+// ============================================================
+// STATS
+// ============================================================
+function renderStats() {
+  const active = trucks.filter(t => !t.isReleased);
+  const customs = active.filter(t => t.currentStageIndex === 6).length;
+  const declaration = active.filter(t => t.currentStageIndex === 7).length;
+  const problems = active.filter(t => hasActiveProblem(t)).length;
+  const today = new Date();
+  const releasedToday = trucks.filter(t => {
+    if (!t.isReleased || !t.releasedAt) return false;
+    return new Date(t.releasedAt).toDateString() === today.toDateString();
+  }).length;
+
+  document.getElementById('statActive').textContent      = active.length;
+  document.getElementById('statCustoms').textContent     = customs;
+  document.getElementById('statDeclaration').textContent = declaration;
+  document.getElementById('statProblems').textContent    = problems;
+  document.getElementById('statReleased').textContent    = releasedToday;
+}
+
+// ============================================================
+// PILLS
+// ============================================================
+function renderPills() {
+  const inProgress = trucks.filter(t => !t.isReleased && !hasActiveProblem(t)).length;
+  const problem = trucks.filter(t => !t.isReleased && hasActiveProblem(t)).length;
+  const released = trucks.filter(t => t.isReleased).length;
+  const all = trucks.length;
+
+  document.getElementById('pillInProgress').textContent = inProgress;
+  document.getElementById('pillProblem').textContent = problem;
+  document.getElementById('pillReleased').textContent = released;
+  document.getElementById('pillAll').textContent = all;
+
+  // urgent badge for problems
+  const probPill = document.getElementById('pillProblem');
+  if (problem > 0) probPill.classList.add('urgent');
+  else probPill.classList.remove('urgent');
+
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.toggle('is-active', p.dataset.filter === activeFilter);
+  });
+}
+
+// ============================================================
+// CLIENT FILTER (select)
+// ============================================================
+function renderClientFilter() {
+  const sel = document.getElementById('clientFilter');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Все клиенты</option>' +
+    clients.map(c => `<option value="${c}">${c}</option>`).join('');
+  if (clients.includes(current)) sel.value = current;
+}
+
+// ============================================================
+// MINI PROGRESS
+// ============================================================
+function renderMiniProgress(t) {
+  let html = '<div class="mini-progress-stages">';
+  for (let i = 0; i < TOTAL_STAGES; i++) {
+    let cls = '';
+    if (t.isReleased)                    cls = 'released-dot';
+    else if (i < t.currentStageIndex)    cls = 'done';
+    else if (i === t.currentStageIndex)  cls = hasActiveProblem(t) ? 'problem' : 'current';
+    html += `<div class="mini-stage ${cls}"></div>`;
+    if (i < TOTAL_STAGES - 1) {
+      let lineCls = '';
+      if (t.isReleased)                  lineCls = 'released-line';
+      else if (i < t.currentStageIndex)  lineCls = 'done';
+      html += `<div class="mini-stage-line ${lineCls}"></div>`;
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// TRUCK ROW
+// ============================================================
+function renderTruckRow(t) {
+  const stageInfo = STAGES[t.currentStageIndex];
+  const cur = getCurrentStageEntry(t);
+  const timeOnStage = cur ? formatDuration(getStageDuration(cur)) : '—';
+  const totalTime = formatDuration(getTotalDuration(t));
+  const percent = getProgressPercent(t);
+  const isProblem = hasActiveProblem(t);
+
+  let badge;
+  if (t.isReleased) {
+    badge = `<span class="badge badge-released"><span class="badge-dot"></span>Выпущена</span>`;
+  } else if (isProblem) {
+    badge = `<span class="badge badge-problem"><span class="badge-dot"></span>Проблема</span>`;
+  } else {
+    badge = `<span class="badge badge-active"><span class="badge-dot"></span>Активна</span>`;
+  }
+
+  const timeBlock = t.isReleased
+    ? `<div class="time-on-stage"><span class="label">Всего</span><strong>${totalTime}</strong></div>`
+    : `<div class="time-on-stage"><span class="label">На этапе</span><strong>${timeOnStage}</strong></div>`;
+
+  let rowClass = '';
+  if (isProblem) rowClass = 'is-problem';
+  else if (t.isReleased) rowClass = 'is-released';
+
+  let fillClass = '';
+  if (t.isReleased) fillClass = 'done';
+  else if (isProblem) fillClass = 'problem';
+
+  return `
+    <div class="truck-row ${rowClass}" data-truck-id="${t.id}">
+      <div class="truck-number-block">
+        <div class="truck-number">${t.number}</div>
+        <div class="truck-id">${t.id}${t.client ? ' · ' + t.client : ''}${t.customs ? ' · ' + t.customs : ''}${t.assignedOperatorLogin ? ' · отв. ' + t.assignedOperatorLogin : ''}</div>
+      </div>
+      <div class="badge-cell">${badge}</div>
+      <div class="stage-name"><strong>${stageInfo.short}</strong></div>
+      ${timeBlock}
+      <div class="progress-cell">
+        <div class="progress-bar">
+          <div class="progress-bar-fill ${fillClass}" style="width:${percent}%"></div>
+        </div>
+        <div class="progress-text">${percent}%</div>
+      </div>
+      <div class="row-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+      <div class="mini-progress-cell">${renderMiniProgress(t)}</div>
+    </div>
+  `;
+}
+
+// ============================================================
+// FILTER + SORT
+// ============================================================
+function applyFilters(list) {
+  return list.filter(t => {
+    // Big segmented filter
+    if (activeFilter === 'in_progress') {
+      if (t.isReleased) return false;
+      if (hasActiveProblem(t)) return false;
+    } else if (activeFilter === 'problem') {
+      if (t.isReleased) return false;
+      if (!hasActiveProblem(t)) return false;
+    } else if (activeFilter === 'released') {
+      if (!t.isReleased) return false;
+    }
+    // 'all' — no exclusion
+
+    // Aux filters
+    if (filters.stage !== '' && t.currentStageIndex !== Number(filters.stage)) return false;
+    if (filters.client && t.client !== filters.client) return false;
+    if (filters.customs && t.customs !== filters.customs) return false;
+    if (filters.search) {
+      const s = filters.search.toLowerCase();
+      const inNumber = t.number.toLowerCase().includes(s);
+      const inId = t.id.toLowerCase().includes(s);
+      const inClient = (t.client || '').toLowerCase().includes(s);
+      if (!inNumber && !inId && !inClient) return false;
+    }
+    return true;
+  });
+}
+
+function sortTrucks(list) {
+  return list.sort((a, b) => {
+    if (a.isReleased !== b.isReleased) return a.isReleased ? 1 : -1;
+    const ap = hasActiveProblem(a), bp = hasActiveProblem(b);
+    if (ap !== bp) return ap ? -1 : 1;
+    return b.createdAt - a.createdAt;
+  });
+}
+
+function renderTrucksList() {
+  const container = document.getElementById('trucksList');
+  const filtered = sortTrucks(applyFilters([...trucks]));
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <h3>Ничего не найдено</h3>
+        <p>Попробуйте изменить фильтры или поисковый запрос</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(renderTruckRow).join('');
+}
+
+// ============================================================
+// TIMELINE
+// ============================================================
+function renderTimeline(t) {
+  let html = '<div class="timeline">';
+  for (let i = 0; i < TOTAL_STAGES; i++) {
+    const stage = STAGES[i];
+    const entry = t.stageHistory.find(s => s.stageIndex === i);
+    const stageProblems = t.problems.filter(p => p.stageIndex === i);
+    const hasUnresolved = stageProblems.some(p => !p.resolvedAt);
+
+    let cls = '';
+    let times = '';
+    let durBlock = '';
+    let statusText = '';
+
+    if (t.isReleased && i === 9) {
+      cls = 'released';
+      if (entry) {
+        times = `
+          <div class="tl-times">
+            <span class="label">Выпущена</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+          </div>`;
+      }
+    } else if (entry && entry.exitedAt !== null) {
+      cls = 'done';
+      const dur = formatDuration(entry.exitedAt - entry.enteredAt);
+      times = `
+        <div class="tl-times">
+          <span class="label">Начало</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+          <span class="label">Конец</span><span class="val">${formatDateTime(entry.exitedAt)}</span>
+        </div>`;
+      durBlock = `<div class="tl-duration"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${dur}</div>`;
+    } else if (entry && entry.exitedAt === null && !t.isReleased) {
+      cls = hasUnresolved ? 'problem' : 'current';
+      statusText = hasUnresolved ? 'Проблема на этапе' : 'Текущий этап';
+      const dur = formatDuration(Date.now() - entry.enteredAt);
+      times = `
+        <div class="tl-times">
+          <span class="label">Начало</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+        </div>`;
+      durBlock = `<div class="tl-duration"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${dur}</div>`;
+    } else {
+      statusText = 'Ожидает';
+    }
+
+    let problemBlock = '';
+    if (stageProblems.length > 0) {
+      problemBlock = stageProblems.map(p => {
+        const isResolved = !!p.resolvedAt;
+        return `
+          <div class="tl-problem ${isResolved ? 'resolved' : ''}">
+            <div class="tl-problem-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Проблема
+              ${isResolved ? '<span class="resolved-tag">РЕШЕНА</span>' : ''}
+            </div>
+            ${p.reason}
+            ${p.resolveNote ? `<div style="margin-top:6px;color:var(--text-2);font-size:12.5px;">→ ${p.resolveNote}</div>` : ''}
+            <div class="tl-problem-time">
+              Зафиксировано: ${formatDateTime(p.reportedAt)}
+              ${isResolved ? ` · Решено: ${formatDateTime(p.resolvedAt)}` : ''}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    html += `
+      <div class="tl-item ${cls}">
+        <div class="tl-dot"></div>
+        <div class="tl-stage-name">${i+1}. ${stage.label}</div>
+        ${statusText ? `<div class="tl-status">${statusText}</div>` : ''}
+        ${times}
+        ${durBlock}
+        ${problemBlock}
+      </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// DETAIL PANEL
+// ============================================================
+function renderDetailPanel() {
+  const t = trucks.find(x => x.id === activeTruckId);
+  if (!t) return;
+  const stageInfo = STAGES[t.currentStageIndex];
+  const cur = getCurrentStageEntry(t);
+  const percent = getProgressPercent(t);
+  const totalDur = formatDuration(getTotalDuration(t));
+  const isProblem = hasActiveProblem(t);
+
+  let badge;
+  if (t.isReleased) {
+    badge = `<span class="badge badge-released"><span class="badge-dot"></span>Выпущена</span>`;
+  } else if (isProblem) {
+    badge = `<span class="badge badge-problem"><span class="badge-dot"></span>Проблема</span>`;
+  } else {
+    badge = `<span class="badge badge-active"><span class="badge-dot"></span>Активна</span>`;
+  }
+
+  // ===== HERO TIME
+  let heroClass = '';
+  let heroLeftLabel = 'На текущем этапе';
+  let heroLeftValue = cur ? formatDuration(getStageDuration(cur)) : '—';
+  if (t.isReleased) { heroClass = 'released'; heroLeftLabel = 'Завершено'; heroLeftValue = formatDateTime(t.releasedAt); }
+  else if (isProblem) heroClass = 'problem';
+
+  const heroTime = `
+    <div class="hero-time ${heroClass}">
+      <div class="hero-time-cell">
+        <div class="hero-time-label">${heroLeftLabel}</div>
+        <div class="hero-time-value">${heroLeftValue}</div>
+      </div>
+      <div class="hero-time-divider"></div>
+      <div class="hero-time-cell">
+        <div class="hero-time-label">Общее время</div>
+        <div class="hero-time-value">${totalDur}</div>
+      </div>
+    </div>`;
+
+  // ===== Current stage card
+  let csClass = '';
+  let csLabel = 'Текущий этап';
+  if (t.isReleased) { csClass = 'released'; csLabel = 'Цикл завершён'; }
+  else if (isProblem) { csClass = 'problem'; csLabel = 'Проблема на этапе'; }
+
+  const csCard = `
+    <div class="current-stage ${csClass}">
+      <div class="current-stage-label">${csLabel}</div>
+      <div class="current-stage-name">${stageInfo.label}</div>
+    </div>`;
+
+  // ===== Progress
+  let fillClass = '';
+  if (t.isReleased) fillClass = 'done';
+  else if (isProblem) fillClass = 'problem';
+  const percentColor = isProblem ? 'var(--red)' : (t.isReleased ? 'var(--green)' : 'var(--blue)');
+
+  const progressBlock = `
+    <div class="progress-block">
+      <div class="progress-block-head">
+        <span>Прогресс цикла</span>
+        <span class="progress-block-percent" style="color:${percentColor}">${percent}%</span>
+      </div>
+      <div class="progress-block-bar">
+        <div class="progress-block-fill ${fillClass}" style="width:${percent}%"></div>
+      </div>
+    </div>`;
+
+  // ===== Info grid (с inline-редактированием товаров / веса / суммы)
+  const fieldsLocked = t.isReleased;            // после выпуска — read-only
+  const arrivedRequired = (t.currentStageIndex === ARRIVED_STAGE); // звёздочка на «Прибытии»
+  const goodsValue = t.goodsCount  !== null && t.goodsCount  !== undefined ? t.goodsCount  : '';
+  const weightValue = t.weight     !== null && t.weight     !== undefined ? t.weight     : '';
+  const sumValue   = t.sumAmount   !== null && t.sumAmount  !== undefined ? t.sumAmount  : '';
+
+  const goodsField = fieldsLocked
+    ? `<div class="info-value mono">${t.goodsCount !== null && t.goodsCount !== undefined ? `${t.goodsCount} шт.` : '—'}</div>`
+    : `<input type="number" class="info-edit-input" id="goodsEditInput" value="${goodsValue}" min="1" step="1" placeholder="не указано" data-truck-id="${t.id}" />`;
+  const weightField = fieldsLocked
+    ? `<div class="info-value mono">${t.weight !== null && t.weight !== undefined ? `${t.weight} кг` : '—'}</div>`
+    : `<input type="number" class="info-edit-input" id="weightEditInput" value="${weightValue}" min="0" step="0.01" placeholder="не указан" data-truck-id="${t.id}" />`;
+  const sumField = fieldsLocked
+    ? `<div class="info-value mono">${t.sumAmount !== null && t.sumAmount !== undefined ? `${t.sumAmount} сом` : '—'}</div>`
+    : `<input type="number" class="info-edit-input" id="sumEditInput" value="${sumValue}" min="0" step="0.01" placeholder="не указана" data-truck-id="${t.id}" />`;
+
+  const infoGrid = `
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">ID</div>
+        <div class="info-value mono">${t.id}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Номер фуры</div>
+        <div class="info-value mono">${t.number}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Клиент</div>
+        <div class="info-value ${t.client ? '' : 'empty'}">${t.client || 'не указан'}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Таможня</div>
+        <div class="info-value ${t.customs ? '' : 'empty'}">${t.customs || 'не указана'}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Прибыла</div>
+        <div class="info-value">${formatDateTime(t.createdAt)}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Товаров (шт.) ${arrivedRequired ? '<span class="req">*</span>' : ''}<span class="info-edit-saved" id="goodsSaved">сохранено</span></div>
+        ${goodsField}
+      </div>
+      <div class="info-item">
+        <div class="info-label">Вес (кг) ${arrivedRequired ? '<span class="req">*</span>' : ''}<span class="info-edit-saved" id="weightSaved">сохранено</span></div>
+        ${weightField}
+      </div>
+      <div class="info-item">
+        <div class="info-label">Сумма (сом) ${arrivedRequired ? '<span class="req">*</span>' : ''}<span class="info-edit-saved" id="sumSaved">сохранено</span></div>
+        ${sumField}
+      </div>
+      <div class="info-item">
+        <div class="info-label">Общее время</div>
+        <div class="info-value mono">${totalDur}</div>
+      </div>
+      <div class="info-item" style="grid-column: 1 / -1;">
+        <div class="info-label">Ответственный оператор</div>
+        ${(() => {
+          if (t.isReleased) {
+            return `<div class="info-value mono">${t.assignedOperatorLogin || '— не был назначен —'}</div>`;
+          }
+          if (!t.assignedOperatorLogin) {
+            return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span class="info-value empty" style="margin:0;">не назначен</span>
+              <button class="btn btn-primary" style="padding:6px 12px;font-size:12px;" id="assignSelfBtn">Взять себе</button>
+            </div>`;
+          }
+          if (t.assignedOperatorId === currentUserId) {
+            return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <span class="info-value mono" style="margin:0;">${t.assignedOperatorLogin} <span style="color:var(--text-3);font-weight:400;">(вы)</span></span>
+              <button class="btn" style="padding:6px 12px;font-size:12px;border:1px solid var(--border);" id="unassignBtn">Снять с себя</button>
+            </div>`;
+          }
+          return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="info-value mono" style="margin:0;">${t.assignedOperatorLogin}</span>
+            <button class="btn btn-primary" style="padding:6px 12px;font-size:12px;" id="assignSelfBtn">Передать мне</button>
+          </div>`;
+        })()}
+      </div>
+    </div>`;
+
+  // ===== File area
+  let fileBlock = '';
+  if (t.declarationFile) {
+    fileBlock = `
+      <div class="file-row">
+        <a class="file-icon" href="/api/trucks/${encodeURIComponent(t.id)}/declaration/download" title="Скачать">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </a>
+        <a class="file-info" href="/api/trucks/${encodeURIComponent(t.id)}/declaration/download" style="text-decoration:none;color:inherit;">
+          <div class="file-name">${t.declarationFile}</div>
+          <div class="file-meta">Загружено · нажмите, чтобы скачать</div>
+        </a>
+        ${t.isReleased ? '' : `<button class="file-remove" id="removeFile" title="Удалить файл">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6"/><path d="M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </button>`}
+      </div>`;
+  } else {
+    fileBlock = t.isReleased
+      ? `<div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text-3);font-size:13px;font-style:italic">Декларация не была загружена</div>`
+      : `
+      <label class="file-area">
+        <span class="file-area-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </span>
+        <div class="file-area-text"><strong>Загрузить декларацию</strong></div>
+        <div class="file-area-formats">PDF · DOC · DOCX · XML</div>
+        <input type="file" id="fileInput" hidden accept=".pdf,.doc,.docx,.xml" />
+      </label>`;
+  }
+
+  // ===== Prelim info block =====
+  let prelimSection = '';
+  const showPrelim = t.currentStageIndex >= 1 || !!t.prelimInfoFile;
+  if (showPrelim) {
+    let prelimContent;
+    if (t.prelimInfoFile) {
+      const canRemovePrelim = !t.isReleased && t.currentStageIndex === 1;
+      prelimContent = `
+        <div class="file-row">
+          <a class="file-icon" href="/api/trucks/${encodeURIComponent(t.id)}/prelim-file/download" title="Скачать">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </a>
+          <a class="file-info" href="/api/trucks/${encodeURIComponent(t.id)}/prelim-file/download" style="text-decoration:none;color:inherit;">
+            <div class="file-name">${t.prelimInfoFile}</div>
+            <div class="file-meta">${canRemovePrelim ? 'Нажмите, чтобы скачать · можно удалить' : 'Нажмите, чтобы скачать'}</div>
+          </a>
+          ${canRemovePrelim ? `<button class="file-remove" id="removePrelimFile" title="Удалить файл">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6"/><path d="M14 11v6"/>
+              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+          </button>` : ''}
+        </div>`;
+    } else if (t.isReleased) {
+      prelimContent = `<div style="background:var(--surface-2);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text-3);font-size:13px;font-style:italic">Файл не был загружен</div>`;
+    } else {
+      prelimContent = `
+        <label class="file-area">
+          <span class="file-area-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </span>
+          <div class="file-area-text"><strong>Загрузить предварительную информацию</strong></div>
+          <div class="file-area-formats">PDF · DOC · DOCX · XML</div>
+          <input type="file" id="prelimFileInput" hidden accept=".pdf,.doc,.docx,.xml" />
+        </label>`;
+    }
+    prelimSection = `
+      <div class="panel-section">
+        <div class="panel-section-title">Предварительная информация</div>
+        ${prelimContent}
+      </div>`;
+  }
+
+  const timeline = renderTimeline(t);
+
+  // ===== Action buttons
+  let actionsHtml = '';
+  if (!t.isReleased) {
+    const nextStage = STAGES[t.currentStageIndex + 1];
+    // На «Прибытии» блокируем next пока не заполнены товары + вес + сумма
+    const arrivedIncomplete = t.currentStageIndex === ARRIVED_STAGE && (
+      t.goodsCount == null || t.weight == null || t.sumAmount == null
+    );
+    if (arrivedIncomplete) {
+      actionsHtml = `<button class="btn btn-primary" id="actionNext" disabled title="Заполните количество товаров, вес и сумму">→ ${nextStage.short}</button>`;
+    } else {
+      actionsHtml = `<button class="btn btn-primary" id="actionNext">→ ${nextStage.short}</button>`;
+    }
+
+    if (isProblem) {
+      actionsHtml += `<button class="btn btn-success" id="actionResolve">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Снять проблему
+      </button>`;
+    } else {
+      actionsHtml += `<button class="btn btn-danger" id="actionProblem">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Проблема
+      </button>`;
+    }
+  }
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="slide-header">
+      <div class="slide-title-block">
+        <span class="slide-eyebrow">${t.id}</span>
+        <div class="slide-title">${t.number}</div>
+        ${badge}
+      </div>
+      <button class="slide-close" data-close>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="slide-body">
+      ${heroTime}
+      ${csCard}
+      ${progressBlock}
+
+      <div class="panel-section">
+        <div class="panel-section-title">Информация</div>
+        ${infoGrid}
+      </div>
+
+      ${prelimSection}
+
+      <div class="panel-section">
+        <div class="panel-section-title">Декларация</div>
+        ${fileBlock}
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-section-title">Хронология этапов</div>
+        ${timeline}
+      </div>
+    </div>
+    ${actionsHtml ? `<div class="slide-footer">${actionsHtml}</div>` : ''}
+  `;
+
+  // Attach handlers
+  const fileInput = document.getElementById('fileInput');
+  if (fileInput) {
+    fileInput.addEventListener('change', async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      try {
+        const updated = await MeridianAPI.uploadFile(t.id, 'declaration', f);
+        upsertTruck(updated);
+        renderAll();
+        showToast('Декларация прикреплена', 'success');
+      } catch (err) { showToast(err.error || 'Не удалось загрузить файл', 'error'); }
+    });
+  }
+  const removeFile = document.getElementById('removeFile');
+  if (removeFile) {
+    removeFile.addEventListener('click', async e => {
+      e.stopPropagation();
+      try {
+        const updated = await MeridianAPI.deleteFile(t.id, 'declaration');
+        upsertTruck(updated);
+        renderAll();
+        showToast('Файл удалён');
+      } catch (err) { showToast(err.error || 'Не удалось удалить файл', 'error'); }
+    });
+  }
+  const prelimFileInput = document.getElementById('prelimFileInput');
+  if (prelimFileInput) {
+    prelimFileInput.addEventListener('change', async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      try {
+        const updated = await MeridianAPI.uploadFile(t.id, 'prelim', f);
+        upsertTruck(updated);
+        renderAll();
+        showToast('Предварительная информация загружена', 'success');
+      } catch (err) { showToast(err.error || 'Не удалось загрузить файл', 'error'); }
+    });
+  }
+  const removePrelim = document.getElementById('removePrelimFile');
+  if (removePrelim) {
+    removePrelim.addEventListener('click', async e => {
+      e.stopPropagation();
+      try {
+        const updated = await MeridianAPI.deleteFile(t.id, 'prelim');
+        upsertTruck(updated);
+        renderAll();
+        showToast('Файл удалён');
+      } catch (err) { showToast(err.error || 'Не удалось удалить файл', 'error'); }
+    });
+  }
+  // Назначение/снятие ответственного
+  const assignBtn = document.getElementById('assignSelfBtn');
+  if (assignBtn) assignBtn.addEventListener('click', async () => {
+    try {
+      const updated = await MeridianAPI.assignTruck(t.id);
+      upsertTruck(updated);
+      renderAll();
+      showToast('Заявка назначена на вас', 'success');
+    } catch (err) { showToast(err.error || 'Не удалось назначить', 'error'); }
+  });
+  const unassignBtn = document.getElementById('unassignBtn');
+  if (unassignBtn) unassignBtn.addEventListener('click', async () => {
+    try {
+      const updated = await MeridianAPI.unassignTruck(t.id);
+      upsertTruck(updated);
+      renderAll();
+      showToast('Ответственный снят');
+    } catch (err) { showToast(err.error || 'Не удалось снять', 'error'); }
+  });
+
+  const actionNext = document.getElementById('actionNext');
+  if (actionNext) actionNext.addEventListener('click', () => advanceStage(t.id));
+  const actionProblem = document.getElementById('actionProblem');
+  if (actionProblem) actionProblem.addEventListener('click', () => openProblemModal(t.id));
+  const actionResolve = document.getElementById('actionResolve');
+  if (actionResolve) actionResolve.addEventListener('click', () => openResolveModal(t.id));
+
+  // Inline-редактирование товаров / веса / суммы — общий обработчик через PATCH.
+  function wireInlineEdit(inputId, savedId, field, opts) {
+    const inp = document.getElementById(inputId);
+    if (!inp) return;
+    const showSaved = (() => {
+      let timer;
+      return () => {
+        const ind = document.getElementById(savedId);
+        if (!ind) return;
+        ind.classList.add('is-shown');
+        clearTimeout(timer);
+        timer = setTimeout(() => ind.classList.remove('is-shown'), 1500);
+      };
+    })();
+    const current = () => t[field];
+    const save = async () => {
+      const v = inp.value.trim();
+      let payload;
+      if (v === '') {
+        if (current() == null) return;
+        payload = { [field]: null };
+      } else {
+        const n = opts.parse(v);
+        if (n == null) {
+          inp.classList.add('has-error');
+          showToast(opts.errorMsg, 'error');
+          return;
+        }
+        if (current() === n) return;
+        payload = { [field]: n };
+      }
+      try {
+        const updated = await MeridianAPI.patchTruck(t.id, payload);
+        upsertTruck(updated);
+        inp.classList.remove('has-error');
+        renderAll();
+        showSaved();
+      } catch (err) {
+        inp.classList.add('has-error');
+        showToast(err.error || 'Не удалось сохранить', 'error');
+        inp.value = current() ?? '';
+      }
+    };
+    inp.addEventListener('blur', save);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
+  }
+  wireInlineEdit('goodsEditInput',  'goodsSaved',  'goodsCount', {
+    parse: v => { const n = parseInt(v, 10); return Number.isInteger(n) && n >= 1 ? n : null; },
+    errorMsg: 'Введите положительное число (товары)',
+  });
+  wireInlineEdit('weightEditInput', 'weightSaved', 'weight', {
+    parse: v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? n : null; },
+    errorMsg: 'Введите положительное число (вес)',
+  });
+  wireInlineEdit('sumEditInput',    'sumSaved',    'sumAmount', {
+    parse: v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? n : null; },
+    errorMsg: 'Введите положительное число (сумма)',
+  });
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function openTruckDetail(id) {
+  activeTruckId = id;
+  renderDetailPanel();
+  document.getElementById('detailPanel').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetailPanel() {
+  document.getElementById('detailPanel').classList.remove('is-open');
+  document.body.style.overflow = '';
+  activeTruckId = null;
+}
+
+async function advanceStage(id) {
+  const t = trucks.find(x => x.id === id);
+  if (!t || t.isReleased) return;
+  try {
+    const updated = await MeridianAPI.advanceTruck(id);
+    upsertTruck(updated);
+    if (updated.isReleased) showToast(`Заявка ${updated.number} выпущена`, 'success');
+    else showToast(`→ ${STAGES[updated.currentStageIndex].short}`, 'success');
+    renderAll();
+  } catch (err) {
+    showToast(err.error || 'Не удалось перевести этап', 'error');
+    if (/количество товаров/i.test(err.error || '')) {
+      const inp = document.getElementById('goodsEditInput');
+      if (inp) inp.focus();
+    }
+  }
+}
+
+// ============================================================
+// MODAL: NEW TRUCK + COMBOBOX
+// ============================================================
+function renderClientCombo(filterText) {
+  const menu = document.getElementById('clientComboMenu');
+  const trimmed = (filterText || '').trim();
+  const lc = trimmed.toLowerCase();
+  let matched = clients.filter(c => c.toLowerCase().includes(lc));
+  let html = '';
+  matched.forEach(c => {
+    const initials = (c.match(/[A-Za-zА-Яа-я«]/g) || []).join('').replace(/«/g, '').slice(0, 2).toUpperCase();
+    html += `<div class="combobox-option" data-value="${c.replace(/"/g, '&quot;')}">
+      <span class="combobox-option-icon">${initials}</span>
+      ${c}
+    </div>`;
+  });
+  // exact match found?
+  const exact = clients.some(c => c.toLowerCase() === lc);
+  if (trimmed.length > 0 && !exact) {
+    html += `<div class="combobox-option is-add" data-add="${trimmed.replace(/"/g, '&quot;')}">
+      <span class="combobox-option-icon">+</span>
+      Добавить «${trimmed}»
+    </div>`;
+  }
+  if (html === '') {
+    html = `<div class="combobox-empty">Введите название нового клиента</div>`;
+  }
+  menu.innerHTML = html;
+}
+
+function openNewTruckModal() {
+  document.getElementById('truckNumberInput').value = '';
+  document.getElementById('clientComboInput').value = '';
+  document.getElementById('truckNumberError').style.display = 'none';
+  document.getElementById('truckNumberInput').classList.remove('has-error');
+  document.getElementById('customsSelect').value = '';
+  document.getElementById('customsSelect').classList.remove('has-error');
+  document.getElementById('customsError').style.display = 'none';
+  document.getElementById('clientCombo').classList.remove('is-open');
+  renderClientCombo('');
+  document.getElementById('newTruckModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('truckNumberInput').focus(), 100);
+}
+
+async function submitNewTruck() {
+  const numEl = document.getElementById('truckNumberInput');
+  const errEl = document.getElementById('truckNumberError');
+  const num = numEl.value.trim();
+  if (!num) {
+    errEl.textContent = 'Введите номер фуры'; errEl.style.display = 'block';
+    numEl.classList.add('has-error');
+    return;
+  }
+  const customsSel = document.getElementById('customsSelect');
+  const customsErrEl = document.getElementById('customsError');
+  if (!customsSel.value) {
+    customsErrEl.style.display = 'block';
+    customsSel.classList.add('has-error');
+    return;
+  }
+  customsErrEl.style.display = 'none';
+  customsSel.classList.remove('has-error');
+  const clientName = document.getElementById('clientComboInput').value.trim() || null;
+
+  try {
+    const created = await MeridianAPI.createTruck({
+      number: num, customs: customsSel.value, client: clientName,
+    });
+    upsertTruck(created);
+    if (clientName && !clients.includes(clientName)) {
+      clients.push(clientName);
+      clients.sort((a, b) => a.localeCompare(b));
+      renderClientFilter();
+    }
+    closeAllModals();
+    renderAll();
+    showToast(`Заявка ${num} создана`, 'success');
+    setTimeout(() => openTruckDetail(created.id), 200);
+  } catch (err) {
+    errEl.textContent = err.error || 'Не удалось создать заявку';
+    errEl.style.display = 'block';
+    numEl.classList.add('has-error');
+  }
+}
+
+// ============================================================
+// MODAL: PROBLEM
+// ============================================================
+let problemTruckId = null;
+function openProblemModal(id) {
+  const t = trucks.find(x => x.id === id);
+  if (!t) return;
+  problemTruckId = id;
+  document.getElementById('problemModalSubtitle').textContent =
+    `${t.number} · ${STAGES[t.currentStageIndex].label}`;
+  document.getElementById('problemReason').value = '';
+  document.getElementById('problemError').style.display = 'none';
+  document.getElementById('problemReason').classList.remove('has-error');
+  document.getElementById('problemModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('problemReason').focus(), 100);
+}
+async function submitProblem() {
+  const reasonEl = document.getElementById('problemReason');
+  const errEl = document.getElementById('problemError');
+  const reason = reasonEl.value.trim();
+  if (!reason) {
+    errEl.style.display = 'block';
+    reasonEl.classList.add('has-error');
+    return;
+  }
+  try {
+    const updated = await MeridianAPI.reportProblem(problemTruckId, reason);
+    upsertTruck(updated);
+    closeAllModals();
+    renderAll();
+    showToast('Проблема зафиксирована', 'error');
+  } catch (err) {
+    showToast(err.error || 'Не удалось зафиксировать проблему', 'error');
+  }
+}
+
+// ============================================================
+// MODAL: RESOLVE PROBLEM
+// ============================================================
+let resolveTruckId = null;
+function openResolveModal(id) {
+  const t = trucks.find(x => x.id === id);
+  if (!t) return;
+  resolveTruckId = id;
+  const activeProblems = t.problems.filter(p => p.stageIndex === t.currentStageIndex && !p.resolvedAt);
+  document.getElementById('resolveModalSubtitle').textContent =
+    `${t.number} · ${STAGES[t.currentStageIndex].label} · активных проблем: ${activeProblems.length}`;
+  document.getElementById('resolveNote').value = '';
+  document.getElementById('resolveModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('resolveNote').focus(), 100);
+}
+async function submitResolve() {
+  const note = document.getElementById('resolveNote').value.trim() || null;
+  try {
+    const updated = await MeridianAPI.resolveProblem(resolveTruckId, note);
+    upsertTruck(updated);
+    closeAllModals();
+    renderAll();
+    showToast('Отметка «Проблема» снята', 'success');
+  } catch (err) {
+    showToast(err.error || 'Не удалось снять проблему', 'error');
+  }
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function closeAllModals() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('is-open'));
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(text, kind) {
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div');
+  t.className = 'toast' + (kind ? ' '+kind : '');
+  t.textContent = text;
+  stack.appendChild(t);
+  setTimeout(() => t.remove(), 4200);
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
+function renderAll() {
+  renderStats();
+  renderPills();
+  renderClientFilter();
+  renderTrucksList();
+  if (activeTruckId) {
+    const t = trucks.find(x => x.id === activeTruckId);
+    if (!t) closeDetailPanel(); else renderDetailPanel();
+  }
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.addEventListener('click', e => {
+  const row = e.target.closest('.truck-row');
+  if (row) openTruckDetail(row.dataset.truckId);
+  if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) {
+    closeAllModals();
+    closeDetailPanel();
+  }
+});
+
+document.getElementById('newTruckBtn').addEventListener('click', openNewTruckModal);
+document.getElementById('submitNewTruck').addEventListener('click', submitNewTruck);
+document.getElementById('submitProblem').addEventListener('click', submitProblem);
+document.getElementById('submitResolve').addEventListener('click', submitResolve);
+
+document.getElementById('truckNumberInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitNewTruck(); });
+
+// pills
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    activeFilter = pill.dataset.filter;
+    renderPills();
+    renderTrucksList();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  filters.search = e.target.value;
+  renderTrucksList();
+});
+document.getElementById('stageFilter').addEventListener('change', e => {
+  filters.stage = e.target.value;
+  renderTrucksList();
+});
+document.getElementById('clientFilter').addEventListener('change', e => {
+  filters.client = e.target.value;
+  renderTrucksList();
+});
+document.getElementById('customsFilter').addEventListener('change', e => {
+  filters.customs = e.target.value;
+  renderTrucksList();
+});
+
+// ===== Combobox events =====
+const combo = document.getElementById('clientCombo');
+const comboInput = document.getElementById('clientComboInput');
+const comboToggle = document.getElementById('clientComboToggle');
+const comboMenu = document.getElementById('clientComboMenu');
+
+comboToggle.addEventListener('click', () => {
+  combo.classList.toggle('is-open');
+  if (combo.classList.contains('is-open')) {
+    renderClientCombo(comboInput.value);
+    comboInput.focus();
+  }
+});
+comboInput.addEventListener('focus', () => {
+  combo.classList.add('is-open');
+  renderClientCombo(comboInput.value);
+});
+comboInput.addEventListener('input', e => {
+  combo.classList.add('is-open');
+  renderClientCombo(e.target.value);
+});
+comboMenu.addEventListener('click', e => {
+  const opt = e.target.closest('.combobox-option');
+  if (!opt) return;
+  if (opt.dataset.value) {
+    comboInput.value = opt.dataset.value;
+  } else if (opt.dataset.add) {
+    comboInput.value = opt.dataset.add;
+  }
+  combo.classList.remove('is-open');
+});
+document.addEventListener('click', e => {
+  if (!combo.contains(e.target)) combo.classList.remove('is-open');
+});
+
+// ESC closes
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.querySelector('.modal.is-open')) closeAllModals();
+    else if (document.getElementById('detailPanel').classList.contains('is-open')) closeDetailPanel();
+  }
+});
+
+// Auto-update durations
+setInterval(() => {
+  if (activeTruckId) renderDetailPanel();
+  renderTrucksList();
+  renderStats();
+  renderPills();
+}, 60 * 1000);
+
+// ============================================================
+// BOOTSTRAP — загрузка из API
+// ============================================================
+function upsertTruck(t) {
+  const i = trucks.findIndex(x => x.id === t.id);
+  if (i >= 0) trucks[i] = t;
+  else trucks.unshift(t);
+}
+
+async function bootstrap() {
+  // 1) Хедер: имя + роль из /api/auth/me
+  try {
+    const me = await MeridianAPI.me();
+    const nameEl = document.getElementById('userName');
+    const roleEl = document.getElementById('userRole');
+    const avEl   = document.getElementById('userAvatar');
+    if (nameEl) nameEl.textContent = me.login;
+    if (roleEl) roleEl.textContent = me.role_name || '';
+    if (avEl)   avEl.textContent   = (me.login || '?').slice(0, 2).toUpperCase();
+    currentUserId = me.user_id;
+  } catch (e) { /* 401 уже редиректит */ }
+
+  // 2) Logout
+  const lbtn = document.getElementById('logoutBtn');
+  if (lbtn) lbtn.addEventListener('click', async () => {
+    try { await MeridianAPI.logout(); } catch (e) {}
+    location.href = '/login';
+  });
+
+  // 3) Данные параллельно
+  try {
+    const [list, cls, customs] = await Promise.all([
+      MeridianAPI.listTrucks(),
+      MeridianAPI.listClients(),
+      MeridianAPI.listCustoms(),
+    ]);
+    trucks = Array.isArray(list) ? list : [];
+    clients = Array.isArray(cls) ? cls : [];
+    if (Array.isArray(customs) && customs.length) CUSTOMS_OFFICES = customs;
+
+    // Перерисовываем кастомс-фильтр на случай, если набор отличается от зашитого
+    const cf = document.getElementById('customsFilter');
+    if (cf) {
+      const cur = cf.value;
+      cf.innerHTML = '<option value="">Все таможни</option>' +
+        CUSTOMS_OFFICES.map(c => `<option value="${c}">${c}</option>`).join('');
+      if (CUSTOMS_OFFICES.includes(cur)) cf.value = cur;
+    }
+    // И в селекте создания заявки
+    const cs = document.getElementById('customsSelect');
+    if (cs) {
+      cs.innerHTML = '<option value="">Выберите таможню</option>' +
+        CUSTOMS_OFFICES.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+  } catch (e) {
+    showToast(e.error || 'Не удалось загрузить заявки', 'error');
+  }
+
+  renderAll();
+
+  // 4) Периодическое обновление списка (раз в 30 секунд) — синхронизация с действиями других операторов
+  setInterval(async () => {
+    try {
+      const list = await MeridianAPI.listTrucks();
+      if (Array.isArray(list)) {
+        trucks = list;
+        renderStats(); renderPills(); renderTrucksList();
+        if (activeTruckId) {
+          const fresh = trucks.find(x => x.id === activeTruckId);
+          if (!fresh) closeDetailPanel();
+        }
+      }
+    } catch (e) {}
+  }, 30 * 1000);
+}
+
+bootstrap();
+</script>
+
+</body>
+</html>

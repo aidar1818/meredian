@@ -1,0 +1,9 @@
+node_modules/
+uploads/
+db/meridian.db
+db/meridian.db-shm
+db/meridian.db-wal
+.env
+_*.html
+*.log
+.DS_Store

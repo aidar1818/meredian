@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<title>Мои заявки — ОсОО Меридиан</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --white:        #ffffff;
+    --bg:           #fafafa;
+    --surface:      #ffffff;
+    --surface-2:    #f4f5f7;
+    --border:       #e6e8ec;
+    --border-strong:#d4d7dd;
+
+    --text:         #0a0a0a;
+    --text-2:       #4a4f57;
+    --text-3:       #8a909a;
+
+    --blue:         #1d508c;
+    --blue-soft:    #ecf2fa;
+    --blue-line:    #bdd2e7;
+
+    --green:        #0a7f44;
+    --green-soft:   #e6f5ec;
+    --green-line:   #c1e3cf;
+
+    --red:          #c5253a;
+    --red-strong:   #a51b2d;
+    --red-soft:     #fce9ec;
+    --red-line:     #f1c5cd;
+
+    --radius-sm: 6px;
+    --radius:    10px;
+    --radius-lg: 14px;
+
+    --shadow:    0 1px 3px rgba(15,20,30,0.06), 0 6px 16px rgba(15,20,30,0.05);
+    --shadow-lg: 0 10px 40px rgba(15,20,30,0.12);
+
+    --f-sans: "Geist", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-mono: "Geist Mono", ui-monospace, "PingFang SC", monospace;
+
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection { background: var(--blue); color: var(--white); }
+  button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+
+  /* HEADER */
+  .app-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 30;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .brand-mark img {
+    height: 100%;
+    width: auto;
+    display: block;
+  }
+  .brand-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .brand-name { font-size: 14.5px; font-weight: 500; letter-spacing: -0.01em; }
+  .brand-name span {
+    margin-left: 8px; padding-left: 10px;
+    border-left: 1px solid var(--border);
+    color: var(--text-3); font-weight: 400;
+  }
+
+  .user-block { display: flex; align-items: center; gap: 12px; }
+
+  /* LANGUAGE SWITCHER */
+  .lang-switcher {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 32px;
+    background: var(--surface);
+  }
+  .lang-btn {
+    padding: 0 11px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-3);
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+    min-width: 36px;
+    display: grid;
+    place-items: center;
+  }
+  .lang-btn + .lang-btn { border-left: 1px solid var(--border); }
+  .lang-btn.is-active {
+    background: var(--text);
+    color: var(--white);
+  }
+  .lang-btn:not(.is-active):hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .user-info { text-align: right; line-height: 1.3; }
+  .user-name { font-size: 13.5px; font-weight: 500; }
+  .user-role { font-size: 12px; color: var(--text-3); }
+  .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px;
+  }
+  .logout-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .logout-btn:hover { background: var(--surface-2); color: var(--text); }
+  .logout-btn svg { width: 18px; height: 18px; }
+
+  /* MAIN */
+  .app-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .page-header-text { flex: 1; min-width: 200px; }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .page-header .subtitle {
+    color: var(--text-2);
+    font-size: 14.5px;
+  }
+
+  /* BUTTONS (для клиента — нужны для новой машины) */
+  .btn {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.05s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn:active:not(:disabled) { transform: translateY(0.5px); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn:disabled { cursor: not-allowed; opacity: 0.55; }
+  .btn-primary { background: var(--blue); color: var(--white); }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-hover, #143f6d); }
+  .btn-secondary {
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--surface-2); border-color: var(--text-3); }
+
+  /* MODAL */
+  .modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; visibility: hidden;
+    padding: 20px;
+  }
+  .modal.is-open { pointer-events: auto; visibility: visible; }
+  .modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,20,30,0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .modal.is-open .modal-backdrop { opacity: 1; }
+  .modal-card {
+    position: relative;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.96) translateY(8px); opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .modal.is-open .modal-card { transform: scale(1) translateY(0); opacity: 1; }
+  .modal-header { padding: 20px 24px 4px; }
+  .modal-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .modal-subtitle { font-size: 13.5px; color: var(--text-2); margin-top: 4px; }
+  .modal-body { padding: 14px 24px 18px; }
+  .modal-footer {
+    padding: 14px 24px 20px;
+    display: flex; gap: 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .modal-footer .btn { flex: 1; }
+  .form-field { margin-bottom: 14px; }
+  .form-field:last-child { margin-bottom: 0; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .form-label .req { color: var(--red); margin-left: 2px; }
+  .form-input {
+    width: 100%;
+    padding: 0 12px;
+    height: 42px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+  .form-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .form-input.has-error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.10);
+  }
+  .form-input.mono { font-family: var(--f-mono); }
+  .form-error { color: var(--red); font-size: 12.5px; margin-top: 6px; }
+  .form-help  { color: var(--text-3); font-size: 12.5px; margin-top: 6px; }
+
+  /* TOAST */
+  .toast-stack {
+    position: fixed;
+    bottom: calc(20px + var(--safe-bottom));
+    right: 20px;
+    z-index: 300;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--text);
+    color: var(--white);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), toastOut 0.3s 3.5s forwards;
+    max-width: 320px;
+  }
+  .toast.success { background: var(--green); }
+  .toast.error   { background: var(--red); }
+  @keyframes toastIn  { from { transform: translateX(20px); opacity: 0; } }
+  @keyframes toastOut { to   { transform: translateX(20px); opacity: 0; } }
+
+  /* PILLS */
+  .pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .pill:hover { border-color: var(--text-3); }
+  .pill.is-active {
+    background: var(--text);
+    color: var(--white);
+    border-color: var(--text);
+  }
+  .pill-count {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    background: var(--surface-2);
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    color: var(--text-2);
+  }
+  .pill.is-active .pill-count {
+    background: rgba(255,255,255,0.18);
+    color: var(--white);
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+  .truck-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.08s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .truck-card:hover {
+    box-shadow: var(--shadow);
+    border-color: var(--border-strong);
+  }
+  .truck-card:hover.is-problem  { border-left-color: var(--red); }
+  .truck-card:hover.is-released { border-left-color: var(--green); }
+  .truck-card:active { transform: translateY(0.5px); }
+  .truck-card.is-problem  { border-left-color: var(--red); }
+  .truck-card.is-released { border-left-color: var(--green); }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-number {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .badge-active   { background: var(--blue-soft);  color: var(--blue); }
+  .badge-problem  { background: var(--red-soft);   color: var(--red); }
+  .badge-released { background: var(--green-soft); color: var(--green); }
+  .badge-problem .badge-dot { animation: pulseDot 1.6s ease-in-out infinite; }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .card-stage-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .card-stage-name {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .truck-card.is-problem  .card-stage-name { color: var(--red-strong); }
+  .truck-card.is-released .card-stage-name { color: var(--text-2); }
+  .card-percent {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .truck-card.is-problem  .card-percent { color: var(--red); }
+  .truck-card.is-released .card-percent { color: var(--green); }
+
+  .card-mini-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: -4px;
+  }
+  .mini-stage {
+    width: 14px; height: 14px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .mini-stage::after {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border-strong);
+    transition: all 0.2s;
+  }
+  .mini-stage.done::after         { background: var(--blue);  border-color: var(--blue); }
+  .mini-stage.released-dot::after { background: var(--green); border-color: var(--green); }
+  .mini-stage.current::after {
+    background: var(--blue); border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.18);
+    width: 8px; height: 8px;
+  }
+  .mini-stage.problem::after {
+    background: var(--red); border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.18);
+    width: 8px; height: 8px;
+  }
+  .mini-stage-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    min-width: 6px;
+  }
+  .mini-stage-line.done           { background: var(--blue); }
+  .mini-stage-line.released-line  { background: var(--green); }
+
+  .card-times {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 12px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .time-cell { min-width: 0; }
+  .time-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .time-label svg { width: 10px; height: 10px; flex-shrink: 0; }
+  .time-value {
+    font-family: var(--f-mono);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .truck-card.is-problem .time-value.current { color: var(--red); }
+  .truck-card.is-released .time-value { color: var(--text-2); font-size: 13px; font-weight: 500; }
+  .time-divider { background: var(--border); width: 1px; }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--text-3);
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+  }
+  .empty-state-icon { margin-bottom: 12px; opacity: 0.5; }
+  .empty-state h3 { font-size: 16px; color: var(--text-2); margin-bottom: 4px; }
+
+  /* SLIDE-OVER */
+  .slide-over {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; justify-content: flex-end;
+    pointer-events: none; visibility: hidden;
+  }
+  .slide-over.is-open { pointer-events: auto; visibility: visible; }
+  .slide-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,20,30,0.4);
+    backdrop-filter: blur(2px);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .slide-over.is-open .slide-backdrop { opacity: 1; }
+  .slide-content {
+    position: relative;
+    width: 540px;
+    max-width: 100%;
+    background: var(--surface);
+    height: 100%;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    box-shadow: var(--shadow-lg);
+  }
+  .slide-over.is-open .slide-content { transform: translateX(0); }
+
+  .slide-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: sticky; top: 0;
+    background: var(--surface);
+    z-index: 2;
+  }
+  .slide-title-block { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .slide-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-family: var(--f-mono);
+  }
+  .slide-close {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .slide-close:hover { background: var(--surface-2); color: var(--text); }
+
+  .slide-body { padding: 22px 24px 24px; }
+
+  .panel-section { margin-bottom: 24px; }
+  .panel-section:last-child { margin-bottom: 0; }
+  .panel-section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 10px;
+  }
+
+  .hero-time {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    background: var(--text);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .hero-time.problem  { background: var(--red); }
+  .hero-time.released { background: var(--green); }
+  .hero-time-cell { min-width: 0; }
+  .hero-time-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+  .hero-time-value {
+    font-family: var(--f-mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero-time-divider { background: rgba(255,255,255,0.18); width: 1px; margin: 4px 16px; }
+
+  .current-stage {
+    background: var(--blue-soft);
+    border: 1px solid var(--blue-line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .current-stage.released { background: var(--green-soft); border-color: var(--green-line); }
+  .current-stage.problem  { background: var(--red-soft);   border-color: var(--red-line); }
+  .current-stage-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--blue);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .current-stage.released .current-stage-label { color: var(--green); }
+  .current-stage.problem  .current-stage-label { color: var(--red); }
+  .current-stage-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .progress-block { margin-bottom: 16px; }
+  .progress-block-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .progress-block-percent {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .progress-block-bar {
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-block-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+  .progress-block-fill.done    { background: var(--green); }
+  .progress-block-fill.problem { background: var(--red); }
+
+  /* timeline */
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px; bottom: 8px;
+    width: 1.5px;
+    background: var(--border-strong);
+  }
+  .tl-item { position: relative; padding-bottom: 22px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-dot {
+    position: absolute;
+    left: -26px; top: 1px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 2px solid var(--border-strong);
+    display: grid; place-items: center;
+  }
+  .tl-item.done .tl-dot     { background: var(--blue);  border-color: var(--blue); }
+  .tl-item.released .tl-dot { background: var(--green); border-color: var(--green); }
+  .tl-item.done .tl-dot::after,
+  .tl-item.released .tl-dot::after {
+    content: "";
+    width: 7px; height: 4px;
+    border: 1.8px solid var(--white);
+    border-top: none; border-right: none;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .tl-item.current .tl-dot {
+    background: var(--white);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(29,80,140,0.16);
+  }
+  .tl-item.current .tl-dot::after {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  .tl-item.problem .tl-dot {
+    background: var(--red);
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(197,37,58,0.16);
+  }
+  .tl-item.problem .tl-dot::after {
+    content: "!";
+    color: var(--white);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .tl-stage-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .tl-times {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    align-items: baseline;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .tl-times .label {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tl-times .val {
+    font-family: var(--f-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2);
+    font-size: 13px;
+  }
+  .tl-status {
+    font-size: 11.5px;
+    color: var(--text-3);
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+  .tl-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--f-mono);
+    font-size: 12px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+  .tl-duration svg { width: 10px; height: 10px; }
+  .tl-item.problem  .tl-duration { background: var(--red-soft);   color: var(--red); }
+  .tl-item.released .tl-duration { background: var(--green-soft); color: var(--green); }
+
+  .tl-problem {
+    margin-top: 8px;
+    background: var(--red-soft);
+    border: 1px solid var(--red-line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .tl-problem-head {
+    font-size: 10.5px;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tl-problem-head svg { width: 11px; height: 11px; }
+  .tl-problem-time {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 6px;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .meta-item {
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .meta-label {
+    font-size: 10.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .meta-value {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .meta-value.mono  { font-family: var(--f-mono); }
+  .meta-value.empty { color: var(--text-3); font-weight: 400; font-style: italic; }
+
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .file-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 13px; font-weight: 500; word-break: break-all; }
+  .file-meta { font-size: 11px; color: var(--text-3); }
+  .file-empty {
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    color: var(--text-3);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Chinese-specific tweak — увеличиваем размер мелких подписей */
+  html[lang="zh"] .time-label,
+  html[lang="zh"] .panel-section-title,
+  html[lang="zh"] .meta-label,
+  html[lang="zh"] .hero-time-label,
+  html[lang="zh"] .current-stage-label,
+  html[lang="zh"] .tl-times .label,
+  html[lang="zh"] .progress-block-head,
+  html[lang="zh"] .tl-problem-head {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 11px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 860px) {
+    .app-header { padding: 0 16px; height: 56px; }
+    .app-main { padding: 20px 16px 32px; }
+    .page-header h1 { font-size: 24px; }
+    .cards-grid { grid-template-columns: 1fr; gap: 10px; }
+    .truck-card { padding: 12px 14px; }
+    .brand-mark { height: 30px; }
+    .brand-divider { display: none; }
+    .brand-name span { display: none; }
+    .user-info { display: none; }
+    .slide-content { width: 100%; }
+    .pills-row { gap: 6px; }
+    .pill { font-size: 12.5px; padding: 7px 12px; }
+    .hero-time-value { font-size: 19px; }
+  }
+  @media (max-width: 480px) {
+    .app-header { padding: 0 12px; }
+    .app-main { padding: 16px 12px 28px; }
+    .meta-grid { grid-template-columns: 1fr; }
+    .card-number { font-size: 15px; }
+    .time-value { font-size: 14px; }
+    .hero-time { padding: 14px 16px; }
+    .hero-time-value { font-size: 17px; }
+    .lang-btn { padding: 0 8px; min-width: 30px; font-size: 12px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .truck-card { animation: fadeUp 0.35s both; }
+  .truck-card:nth-child(1) { animation-delay: 0.04s; }
+  .truck-card:nth-child(2) { animation-delay: 0.08s; }
+  .truck-card:nth-child(3) { animation-delay: 0.12s; }
+  .truck-card:nth-child(4) { animation-delay: 0.16s; }
+  .truck-card:nth-child(5) { animation-delay: 0.20s; }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <img src="data:image/jpeg;base64,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" alt="ОсОО Меридиан — Таможенный брокер" />
+    </div>
+  </div>
+
+  <div class="user-block">
+    <div class="lang-switcher" role="group" aria-label="Language">
+      <button class="lang-btn is-active" data-lang="ru">RU</button>
+      <button class="lang-btn" data-lang="zh">中</button>
+    </div>
+    <div class="user-info">
+      <div class="user-name" id="userName">—</div>
+      <div class="user-role" id="userRole">Клиент</div>
+    </div>
+    <div class="user-avatar" id="userAvatar">—</div>
+    <button class="logout-btn" id="logoutBtn" title="Выйти">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="app-main">
+  <div class="page-header">
+    <div class="page-header-text">
+      <h1 id="pageTitle">Мои заявки</h1>
+      <p class="subtitle" id="pageSubtitle">Все этапы оформления — от подачи заявки до выпуска</p>
+    </div>
+    <button class="btn btn-primary" id="newTruckBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span id="newTruckBtnLabel">Новая заявка</span>
+    </button>
+  </div>
+
+  <div class="pills-row">
+    <button class="pill is-active" data-filter="active">
+      <span data-i18n="pill.active">В работе</span> <span class="pill-count" id="pillActive">0</span>
+    </button>
+    <button class="pill" data-filter="released">
+      <span data-i18n="pill.released">Выпущенные</span> <span class="pill-count" id="pillReleased">0</span>
+    </button>
+    <button class="pill" data-filter="all">
+      <span data-i18n="pill.all">Все</span> <span class="pill-count" id="pillAll">0</span>
+    </button>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid"></div>
+</main>
+
+<!-- ============ MODAL: NEW TRUCK ============ -->
+<div class="modal" id="newTruckModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Новая заявка</div>
+      <div class="modal-subtitle" id="modalSubtitle">Подача заявки на оформление</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" id="modalLabel" for="truckNumberInput">Номер машины <span class="req">*</span></label>
+        <input class="form-input mono" type="text" id="truckNumberInput" placeholder="напр. 01KG 234 ABC" autocomplete="off" />
+        <div class="form-help" id="modalHelp">Введите регистрационный номер, как указан на машине.</div>
+        <div class="form-error" id="modalError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" id="modalCustomsLabel" for="customsSelect">Таможня <span class="req">*</span></label>
+        <select class="form-input" id="customsSelect">
+          <option value="" id="customsPhOpt">Выберите таможню</option>
+          <option value="Кара-Булак">Кара-Булак</option>
+          <option value="Кант">Кант</option>
+          <option value="Балыкчы">Балыкчы</option>
+          <option value="Манас">Манас</option>
+        </select>
+        <div class="form-help" id="modalCustomsHelp">Выберите таможенный пост для оформления</div>
+        <div class="form-error" id="modalCustomsError" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modalCancelBtn" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitNewTruck">Создать</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<div class="slide-over" id="detailPanel">
+  <div class="slide-backdrop" data-close></div>
+  <div class="slide-content" id="detailContent"></div>
+</div>
+
+<script src="/assets/api.js"></script>
+<script>
+// ============================================================
+// I18N
+// ============================================================
+const I18N = {
+  ru: {
+    'brand.sub': 'Кабинет клиента',
+    'user.role': 'Клиент',
+    'logout.title': 'Выйти',
+    'page.title': 'Мои заявки',
+    'page.subtitle': 'Все этапы оформления — от подачи заявки до выпуска',
+
+    'pill.active':   'В работе',
+    'pill.released': 'Выпущенные',
+    'pill.all':      'Все',
+
+    'status.active':   'В работе',
+    'status.problem':  'Проблема',
+    'status.released': 'Выпущена',
+
+    'card.onStage':    'На этапе',
+    'card.total':      'Всего',
+    'card.completed':  'Завершено',
+
+    'detail.heroOnStage':   'На текущем этапе',
+    'detail.heroTotal':     'Общее время',
+    'detail.heroCompleted': 'Завершено',
+    'detail.currentStage':  'Текущий этап',
+    'detail.problemAtStage':'Проблема на этапе',
+    'detail.cycleComplete': 'Цикл завершён',
+    'detail.cycleProgress': 'Прогресс цикла',
+    'detail.section.info':  'Информация',
+    'detail.section.prelim':      'Предварительная информация',
+    'detail.section.declaration': 'Декларация',
+    'detail.section.timeline':    'Хронология этапов',
+
+    'meta.arrived':   'Прибыла',
+    'meta.released':  'Выпущена',
+    'meta.goods':     'Товаров',
+    'meta.number':    'Номер',
+    'meta.notSpec':   'не указано',
+
+    'file.uploaded':  'Декларация загружена оператором',
+    'file.empty':     'Декларация ещё не загружена',
+    'file.prelimEmpty':'Файл предварительной информации не загружен',
+
+    'tl.start':       'Начало',
+    'tl.end':         'Конец',
+    'tl.released':    'Выпущена',
+    'tl.waiting':     'Ожидает',
+    'tl.current':     'Текущий этап',
+    'tl.problemAt':   'Проблема на этапе',
+    'tl.problem':     'Проблема',
+    'tl.fixedAt':     'Зафиксировано',
+
+    'time.today':     'Сегодня',
+    'time.yesterday': 'Вчера',
+
+    'empty.title':       'Нет фур',
+    'empty.active':      'Сейчас в работе нет ни одной фуры',
+    'empty.released':    'Пока ни одна фура не была выпущена',
+    'empty.all':         'В этой категории пока нет ни одной фуры',
+
+    'unit.pcs':       'шт.',
+
+    'meta.customs':       'Таможня',
+    'modal.customsLabel': 'Таможня',
+    'modal.customsPh':    'Выберите таможню',
+    'modal.customsHelp':  'Выберите таможенный пост для оформления',
+    'error.noCustoms':    'Выберите таможню',
+
+    'btn.newTruck':     'Новая заявка',
+    'modal.title':      'Новая заявка',
+    'modal.subtitle':   'Подача заявки на оформление',
+    'modal.numberLabel':'Номер машины',
+    'modal.numberHelp': 'Введите регистрационный номер, как указан на машине.',
+    'modal.numberPh':   'напр. 01KG 234 ABC',
+    'modal.create':     'Создать',
+    'modal.cancel':     'Отмена',
+    'error.empty':      'Введите номер машины',
+    'error.duplicate':  'Номер уже используется заявкой {id}. Дождитесь её выпуска.',
+    'toast.created':    'Заявка {num} создана',
+  },
+  zh: {
+    'brand.sub': '客户端',
+    'user.role': '客户',
+    'logout.title': '退出',
+    'page.title': '我的申请',
+    'page.subtitle': '全部流程 — 从申请提交到放行',
+
+    'pill.active':   '处理中',
+    'pill.released': '已放行',
+    'pill.all':      '全部',
+
+    'status.active':   '处理中',
+    'status.problem':  '存在问题',
+    'status.released': '已放行',
+
+    'card.onStage':    '当前阶段',
+    'card.total':      '总时长',
+    'card.completed':  '已完成',
+
+    'detail.heroOnStage':   '当前阶段已用时',
+    'detail.heroTotal':     '总时长',
+    'detail.heroCompleted': '已完成',
+    'detail.currentStage':  '当前阶段',
+    'detail.problemAtStage':'阶段问题',
+    'detail.cycleComplete': '周期已完成',
+    'detail.cycleProgress': '周期进度',
+    'detail.section.info':  '基本信息',
+    'detail.section.declaration': '报关单',
+    'detail.section.timeline':    '阶段历程',
+
+    'meta.arrived':   '到达时间',
+    'meta.released':  '放行时间',
+    'meta.goods':     '货物数量',
+    'meta.number':    '车号',
+    'meta.notSpec':   '未指定',
+
+    'file.uploaded':  '操作员已上传报关单',
+    'file.empty':     '报关单尚未上传',
+
+    'tl.start':       '开始',
+    'tl.end':         '结束',
+    'tl.released':    '已放行',
+    'tl.waiting':     '等待中',
+    'tl.current':     '当前阶段',
+    'tl.problemAt':   '阶段问题',
+    'tl.problem':     '问题',
+    'tl.fixedAt':     '记录时间',
+
+    'time.today':     '今天',
+    'time.yesterday': '昨天',
+
+    'empty.title':       '没有卡车',
+    'empty.active':      '目前没有处理中的卡车',
+    'empty.released':    '尚未放行任何卡车',
+    'empty.all':         '此类别中没有卡车',
+
+    'unit.pcs':       '件',
+
+    'meta.customs':       '海关',
+    'modal.customsLabel': '海关',
+    'modal.customsPh':    '请选择海关',
+    'modal.customsHelp':  '请选择办理清关的海关',
+    'error.noCustoms':    '请选择海关',
+
+    'btn.newTruck':     '新建申请',
+    'modal.title':      '新建申请',
+    'modal.subtitle':   '提交清关申请',
+    'modal.numberLabel':'车牌号',
+    'modal.numberHelp': '请按车上标识填写车牌号。',
+    'modal.numberPh':   '例如 01KG 234 ABC',
+    'modal.create':     '创建',
+    'modal.cancel':     '取消',
+    'error.empty':      '请输入车牌号',
+    'error.duplicate':  '该车牌号已被申请 {id} 使用。请等待其放行。',
+    'toast.created':    '申请 {num} 已创建',
+  }
+};
+
+// 8 этапов (убраны «Проехала границу» и «Количество товаров отмечено»).
+const STAGES_I18N = {
+  ru: [
+    { label: 'Ожидает обработки',                      short: 'Ожидает'           },
+    { label: 'Заполняется предварительная информация', short: 'Заполнение'        },
+    { label: 'Предварительная информация завершена',   short: 'Предв. готова'     },
+    { label: 'Прибытие на ВЗТК',                       short: 'Прибытие'          },
+    { label: 'ДВХ открыт — досмотр в таможне',         short: 'ДВХ — досмотр'     },
+    { label: 'Печать декларации / ответ на хранение',  short: 'Декларация'        },
+    { label: 'Документы поданы в таможню',             short: 'Подача документов' },
+    { label: 'Выпуск фуры',                            short: 'Выпущена'          },
+  ],
+  zh: [
+    { label: '等待处理',                                 short: '等待'         },
+    { label: '正在填写预备信息',                         short: '填写信息'     },
+    { label: '预备信息已完成',                           short: '信息完成'     },
+    { label: '抵达临时海关监管区',                       short: '到达'         },
+    { label: '临时仓储 — 海关查验',                      short: '海关查验'     },
+    { label: '报关单打印 / 仓储回复',                    short: '报关'        },
+    { label: '文件已递交海关',                           short: '递交文件'     },
+    { label: '卡车放行',                                 short: '已放行'      },
+  ],
+};
+
+let CUSTOMS_OFFICES = ['Кара-Булак', 'Кант', 'Балыкчы', 'Манас'];
+
+let currentLang = (() => {
+  try { return localStorage.getItem('vztk_lang') || 'ru'; } catch (e) { return 'ru'; }
+})();
+function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ru[key] || key; }
+function STAGES() { return STAGES_I18N[currentLang]; }
+const TOTAL_STAGES = 8;
+
+// ============================================================
+// DATA — заполняется из API
+// ============================================================
+let trucks = [];
+
+// ============================================================
+// HELPERS
+// ============================================================
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formatDateTime(ts) {
+  const d = new Date(ts);
+  const today = new Date();
+  const isToday = d.toDateString() === today.toDateString();
+  const yest = new Date(); yest.setDate(yest.getDate() - 1);
+  const isYesterday = d.toDateString() === yest.toDateString();
+  const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (currentLang === 'zh') {
+    if (isToday) return `${t('time.today')} ${time}`;
+    if (isYesterday) return `${t('time.yesterday')} ${time}`;
+    return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${time}`;
+  }
+  if (isToday) return `${t('time.today')}, ${time}`;
+  if (isYesterday) return `${t('time.yesterday')}, ${time}`;
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}, ${time}`;
+}
+
+function formatDuration(ms) {
+  if (ms < 0) ms = 0;
+  const totalMin = Math.floor(ms / (60*1000));
+  const days = Math.floor(totalMin / (60*24));
+  const hours = Math.floor((totalMin % (60*24)) / 60);
+  const mins = totalMin % 60;
+
+  if (currentLang === 'zh') {
+    if (ms < 60*1000) return `${Math.floor(ms/1000)}秒`;
+    if (days > 0)  return `${days}天${hours}小时`;
+    if (hours > 0) return `${hours}小时${mins}分`;
+    return `${mins}分`;
+  }
+  if (ms < 60*1000) return `${Math.floor(ms/1000)}с`;
+  if (days > 0)  return `${days}д ${hours}ч`;
+  if (hours > 0) return `${hours}ч ${mins}м`;
+  return `${mins}м`;
+}
+
+function getCurrentStageEntry(t) { return t.stageHistory.find(s => s.exitedAt === null); }
+function getStageDuration(s) { const exit = s.exitedAt ?? Date.now(); return exit - s.enteredAt; }
+function getTotalDuration(t) {
+  if (t.isReleased && t.releasedAt) return t.releasedAt - t.createdAt;
+  return Date.now() - t.createdAt;
+}
+function getProgressPercent(t) {
+  if (t.isReleased) return 100;
+  return Math.round((t.currentStageIndex / (TOTAL_STAGES - 1)) * 100);
+}
+function hasActiveProblem(t) {
+  if (t.isReleased) return false;
+  return t.problems.some(p => p.stageIndex === t.currentStageIndex);
+}
+function getProblemReason(p) {
+  if (p.reasonByLang) return p.reasonByLang[currentLang] || p.reasonByLang.ru;
+  return p.reason || '';
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let activeFilter = 'active';
+let activeTruckId = null;
+let nextSeqNumber = 200;
+const CURRENT_CLIENT = 'ОсОО «Логистика-К»';
+
+// ============================================================
+// LANGUAGE SWITCHING
+// ============================================================
+function setLang(lang) {
+  if (lang === currentLang) return;
+  currentLang = lang;
+  try { localStorage.setItem('vztk_lang', lang); } catch (e) {}
+  document.documentElement.setAttribute('lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('is-active', b.dataset.lang === lang);
+  });
+  applyStaticTranslations();
+  renderPills();
+  renderGrid();
+  if (activeTruckId) renderDetail();
+}
+
+function applyStaticTranslations() {
+  document.title = t('page.title') + ' — ОсОО Меридиан';
+  document.getElementById('userRole').textContent = t('user.role');
+  document.getElementById('logoutBtn').setAttribute('title', t('logout.title'));
+  document.getElementById('pageTitle').textContent = t('page.title');
+  document.getElementById('pageSubtitle').textContent = t('page.subtitle');
+  // Кнопка и модалка
+  const _set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  _set('newTruckBtnLabel', t('btn.newTruck'));
+  _set('modalTitle', t('modal.title'));
+  _set('modalSubtitle', t('modal.subtitle'));
+  _set('modalCancelBtn', t('modal.cancel'));
+  _set('submitNewTruck', t('modal.create'));
+  _set('modalCustomsHelp', t('modal.customsHelp'));
+  const cl_lbl = document.getElementById('modalCustomsLabel');
+  if (cl_lbl) cl_lbl.innerHTML = t('modal.customsLabel') + ' <span class="req">*</span>';
+  const cl_ph = document.getElementById('customsPhOpt');
+  if (cl_ph) cl_ph.textContent = t('modal.customsPh');
+  const ml = document.getElementById('modalLabel');
+  if (ml) ml.innerHTML = t('modal.numberLabel') + ' <span class="req">*</span>';
+  const mh = document.getElementById('modalHelp');
+  if (mh) mh.textContent = t('modal.numberHelp');
+  const inp = document.getElementById('truckNumberInput');
+  if (inp) inp.placeholder = t('modal.numberPh');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+}
+
+// ============================================================
+// PILLS
+// ============================================================
+function renderPills() {
+  const all = trucks.length;
+  const active = trucks.filter(t => !t.isReleased).length;
+  const released = trucks.filter(t => t.isReleased).length;
+  document.getElementById('pillAll').textContent = all;
+  document.getElementById('pillActive').textContent = active;
+  document.getElementById('pillReleased').textContent = released;
+
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.toggle('is-active', p.dataset.filter === activeFilter);
+  });
+}
+
+// ============================================================
+// MINI PROGRESS
+// ============================================================
+function renderMiniProgress(tr) {
+  let html = '<div class="card-mini-progress">';
+  for (let i = 0; i < TOTAL_STAGES; i++) {
+    let cls = '';
+    if (tr.isReleased)                      cls = 'released-dot';
+    else if (i < tr.currentStageIndex)      cls = 'done';
+    else if (i === tr.currentStageIndex)    cls = hasActiveProblem(tr) ? 'problem' : 'current';
+    html += `<div class="mini-stage ${cls}"></div>`;
+    if (i < TOTAL_STAGES - 1) {
+      let lineCls = '';
+      if (tr.isReleased)                    lineCls = 'released-line';
+      else if (i < tr.currentStageIndex)    lineCls = 'done';
+      html += `<div class="mini-stage-line ${lineCls}"></div>`;
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// CARD
+// ============================================================
+function renderCard(tr) {
+  const stages = STAGES();
+  const stageInfo = stages[tr.currentStageIndex];
+  const cur = getCurrentStageEntry(tr);
+  const percent = getProgressPercent(tr);
+  const totalTime = formatDuration(getTotalDuration(tr));
+  const isProblem = hasActiveProblem(tr);
+
+  let badge;
+  if (tr.isReleased) {
+    badge = `<span class="badge badge-released"><span class="badge-dot"></span>${t('status.released')}</span>`;
+  } else if (isProblem) {
+    badge = `<span class="badge badge-problem"><span class="badge-dot"></span>${t('status.problem')}</span>`;
+  } else {
+    badge = `<span class="badge badge-active"><span class="badge-dot"></span>${t('status.active')}</span>`;
+  }
+
+  const cardClass =
+    tr.isReleased ? 'is-released' :
+    isProblem     ? 'is-problem'  : 'is-active';
+
+  let timeLeftLabel, timeLeftValue, timeLeftClass = '';
+  if (tr.isReleased) {
+    timeLeftLabel = t('card.completed');
+    timeLeftValue = formatDateTime(tr.releasedAt);
+  } else {
+    timeLeftLabel = t('card.onStage');
+    timeLeftValue = cur ? formatDuration(getStageDuration(cur)) : '—';
+    if (isProblem) timeLeftClass = 'current';
+  }
+
+  return `
+    <div class="truck-card ${cardClass}" data-truck-id="${tr.id}">
+      <div class="card-head">
+        <div class="card-number">${tr.number}</div>
+        ${badge}
+      </div>
+      <div class="card-stage-row">
+        <div class="card-stage-name">${stageInfo.label}</div>
+        <div class="card-percent">${percent}%</div>
+      </div>
+      ${renderMiniProgress(tr)}
+      <div class="card-times">
+        <div class="time-cell">
+          <div class="time-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${timeLeftLabel}
+          </div>
+          <div class="time-value ${timeLeftClass}">${timeLeftValue}</div>
+        </div>
+        <div class="time-divider"></div>
+        <div class="time-cell">
+          <div class="time-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            ${t('card.total')}
+          </div>
+          <div class="time-value">${totalTime}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// GRID
+// ============================================================
+function renderGrid() {
+  const grid = document.getElementById('cardsGrid');
+  let filtered = [...trucks];
+  if (activeFilter === 'active')   filtered = filtered.filter(t => !t.isReleased);
+  if (activeFilter === 'released') filtered = filtered.filter(t => t.isReleased);
+
+  filtered.sort((a, b) => {
+    if (a.isReleased !== b.isReleased) return a.isReleased ? 1 : -1;
+    const ap = hasActiveProblem(a), bp = hasActiveProblem(b);
+    if (ap !== bp) return ap ? -1 : 1;
+    return b.createdAt - a.createdAt;
+  });
+
+  if (filtered.length === 0) {
+    let msg = t('empty.all');
+    if (activeFilter === 'active')   msg = t('empty.active');
+    if (activeFilter === 'released') msg = t('empty.released');
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3>${t('empty.title')}</h3>
+        <p>${msg}</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(renderCard).join('');
+}
+
+// ============================================================
+// TIMELINE
+// ============================================================
+function renderTimeline(tr) {
+  const stages = STAGES();
+  let html = '<div class="timeline">';
+  for (let i = 0; i < TOTAL_STAGES; i++) {
+    const stage = stages[i];
+    const entry = tr.stageHistory.find(s => s.stageIndex === i);
+    const stageProblems = tr.problems.filter(p => p.stageIndex === i);
+
+    let cls = '';
+    let times = '';
+    let durBlock = '';
+    let statusText = t('tl.waiting');
+
+    if (tr.isReleased && i === 9) {
+      cls = 'released';
+      statusText = '';
+      if (entry) {
+        times = `<div class="tl-times">
+          <span class="label">${t('tl.released')}</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+        </div>`;
+      }
+    } else if (entry && entry.exitedAt !== null) {
+      cls = 'done';
+      statusText = '';
+      const dur = formatDuration(entry.exitedAt - entry.enteredAt);
+      times = `<div class="tl-times">
+        <span class="label">${t('tl.start')}</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+        <span class="label">${t('tl.end')}</span><span class="val">${formatDateTime(entry.exitedAt)}</span>
+      </div>`;
+      durBlock = `<div class="tl-duration"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${dur}</div>`;
+    } else if (entry && entry.exitedAt === null && !tr.isReleased) {
+      const hasProb = stageProblems.length > 0;
+      cls = hasProb ? 'problem' : 'current';
+      statusText = hasProb ? t('tl.problemAt') : t('tl.current');
+      const dur = formatDuration(Date.now() - entry.enteredAt);
+      times = `<div class="tl-times">
+        <span class="label">${t('tl.start')}</span><span class="val">${formatDateTime(entry.enteredAt)}</span>
+      </div>`;
+      durBlock = `<div class="tl-duration"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${dur}</div>`;
+    }
+
+    let problemBlock = '';
+    if (stageProblems.length > 0) {
+      problemBlock = stageProblems.map(p => `
+        <div class="tl-problem">
+          <div class="tl-problem-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            ${t('tl.problem')}
+          </div>
+          ${getProblemReason(p)}
+          <div class="tl-problem-time">${t('tl.fixedAt')}: ${formatDateTime(p.reportedAt)}</div>
+        </div>`).join('');
+    }
+
+    html += `
+      <div class="tl-item ${cls}">
+        <div class="tl-dot"></div>
+        <div class="tl-stage-name">${i+1}. ${stage.label}</div>
+        ${statusText ? `<div class="tl-status">${statusText}</div>` : ''}
+        ${times}
+        ${durBlock}
+        ${problemBlock}
+      </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+// ============================================================
+// DETAIL
+// ============================================================
+function renderDetail() {
+  const tr = trucks.find(x => x.id === activeTruckId);
+  if (!tr) return;
+  const stages = STAGES();
+  const stageInfo = stages[tr.currentStageIndex];
+  const cur = getCurrentStageEntry(tr);
+  const percent = getProgressPercent(tr);
+  const totalDur = formatDuration(getTotalDuration(tr));
+  const isProblem = hasActiveProblem(tr);
+
+  let badge;
+  if (tr.isReleased) {
+    badge = `<span class="badge badge-released"><span class="badge-dot"></span>${t('status.released')}</span>`;
+  } else if (isProblem) {
+    badge = `<span class="badge badge-problem"><span class="badge-dot"></span>${t('status.problem')}</span>`;
+  } else {
+    badge = `<span class="badge badge-active"><span class="badge-dot"></span>${t('status.active')}</span>`;
+  }
+
+  let heroClass = '';
+  let heroLeftLabel = t('detail.heroOnStage');
+  let heroLeftValue = cur ? formatDuration(getStageDuration(cur)) : '—';
+  if (tr.isReleased) {
+    heroClass = 'released';
+    heroLeftLabel = t('detail.heroCompleted');
+    heroLeftValue = formatDateTime(tr.releasedAt);
+  } else if (isProblem) heroClass = 'problem';
+
+  const heroTime = `
+    <div class="hero-time ${heroClass}">
+      <div class="hero-time-cell">
+        <div class="hero-time-label">${heroLeftLabel}</div>
+        <div class="hero-time-value">${heroLeftValue}</div>
+      </div>
+      <div class="hero-time-divider"></div>
+      <div class="hero-time-cell">
+        <div class="hero-time-label">${t('detail.heroTotal')}</div>
+        <div class="hero-time-value">${totalDur}</div>
+      </div>
+    </div>`;
+
+  let csClass = '';
+  let csLabel = t('detail.currentStage');
+  if (tr.isReleased)      { csClass = 'released'; csLabel = t('detail.cycleComplete'); }
+  else if (isProblem)     { csClass = 'problem';  csLabel = t('detail.problemAtStage'); }
+
+  const csCard = `
+    <div class="current-stage ${csClass}">
+      <div class="current-stage-label">${csLabel}</div>
+      <div class="current-stage-name">${stageInfo.label}</div>
+    </div>`;
+
+  let fillClass = '';
+  if (tr.isReleased) fillClass = 'done';
+  else if (isProblem) fillClass = 'problem';
+
+  const percentColor = isProblem ? 'var(--red)' : (tr.isReleased ? 'var(--green)' : 'var(--blue)');
+
+  const progressBlock = `
+    <div class="progress-block">
+      <div class="progress-block-head">
+        <span>${t('detail.cycleProgress')}</span>
+        <span class="progress-block-percent" style="color:${percentColor}">${percent}%</span>
+      </div>
+      <div class="progress-block-bar">
+        <div class="progress-block-fill ${fillClass}" style="width:${percent}%"></div>
+      </div>
+    </div>`;
+
+  const metaGrid = `
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">${t('meta.arrived')}</div>
+        <div class="meta-value">${formatDateTime(tr.createdAt)}</div>
+      </div>
+      ${tr.isReleased ? `
+      <div class="meta-item">
+        <div class="meta-label">${t('meta.released')}</div>
+        <div class="meta-value">${formatDateTime(tr.releasedAt)}</div>
+      </div>` : ''}
+      <div class="meta-item">
+        <div class="meta-label">${t('meta.goods')}</div>
+        <div class="meta-value ${tr.goodsCount != null ? 'mono' : 'empty'}">${tr.goodsCount != null ? `${tr.goodsCount} ${t('unit.pcs')}` : t('meta.notSpec')}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">${currentLang === 'zh' ? '重量' : 'Вес'}</div>
+        <div class="meta-value ${tr.weight != null ? 'mono' : 'empty'}">${tr.weight != null ? `${tr.weight} ${currentLang === 'zh' ? '公斤' : 'кг'}` : t('meta.notSpec')}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">${currentLang === 'zh' ? '金额' : 'Сумма'}</div>
+        <div class="meta-value ${tr.sumAmount != null ? 'mono' : 'empty'}">${tr.sumAmount != null ? `${tr.sumAmount} ${currentLang === 'zh' ? '索姆' : 'сом'}` : t('meta.notSpec')}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">${t('meta.number')}</div>
+        <div class="meta-value mono">${tr.number}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">${t('meta.customs')}</div>
+        <div class="meta-value">${tr.customs || '—'}</div>
+      </div>
+    </div>`;
+
+  // ===== Prelim info block (read-only) =====
+  let prelimSection = '';
+  const showPrelim = tr.currentStageIndex >= 1 || !!tr.prelimInfoFile;
+  if (showPrelim) {
+    const prelimContent = tr.prelimInfoFile
+      ? `<a class="file-row" href="/api/trucks/${encodeURIComponent(tr.id)}/prelim-file/download" style="text-decoration:none;color:inherit;display:flex;">
+          <div class="file-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="file-info">
+            <div class="file-name">${tr.prelimInfoFile}</div>
+            <div class="file-meta">${t('file.uploaded')}</div>
+          </div>
+        </a>`
+      : `<div class="file-empty">${t('file.prelimEmpty')}</div>`;
+    prelimSection = `
+      <div class="panel-section">
+        <div class="panel-section-title">${t('detail.section.prelim')}</div>
+        ${prelimContent}
+      </div>`;
+  }
+
+  const fileBlock = tr.declarationFile
+    ? `<a class="file-row" href="/api/trucks/${encodeURIComponent(tr.id)}/declaration/download" style="text-decoration:none;color:inherit;display:flex;">
+        <div class="file-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <div class="file-info">
+          <div class="file-name">${tr.declarationFile}</div>
+          <div class="file-meta">${t('file.uploaded')}</div>
+        </div>
+      </a>`
+    : `<div class="file-empty">${t('file.empty')}</div>`;
+
+  const timeline = renderTimeline(tr);
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="slide-header">
+      <div class="slide-title-block">
+        <div class="slide-title">${tr.number}</div>
+        ${badge}
+      </div>
+      <button class="slide-close" data-close>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="slide-body">
+      ${heroTime}
+      ${csCard}
+      ${progressBlock}
+      <div class="panel-section">
+        <div class="panel-section-title">${t('detail.section.info')}</div>
+        ${metaGrid}
+      </div>
+      ${prelimSection}
+      <div class="panel-section">
+        <div class="panel-section-title">${t('detail.section.declaration')}</div>
+        ${fileBlock}
+      </div>
+      <div class="panel-section">
+        <div class="panel-section-title">${t('detail.section.timeline')}</div>
+        ${timeline}
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// HANDLERS
+// ============================================================
+function openDetail(id) {
+  activeTruckId = id;
+  renderDetail();
+  document.getElementById('detailPanel').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('is-open');
+  document.body.style.overflow = '';
+  activeTruckId = null;
+}
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('.truck-card');
+  if (card) openDetail(card.dataset.truckId);
+  if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) closeDetail();
+});
+
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    activeFilter = pill.dataset.filter;
+    renderPills();
+    renderGrid();
+  });
+});
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('detailPanel').classList.contains('is-open')) closeDetail();
+});
+
+setInterval(() => {
+  if (activeTruckId) renderDetail();
+  renderGrid();
+}, 60 * 1000);
+
+
+// ============================================================
+// NEW TRUCK MODAL
+// ============================================================
+function openNewTruckModal() {
+  const inp = document.getElementById('truckNumberInput');
+  inp.value = '';
+  document.getElementById('modalError').style.display = 'none';
+  inp.classList.remove('has-error');
+  const customsSel = document.getElementById('customsSelect');
+  customsSel.value = '';
+  customsSel.classList.remove('has-error');
+  document.getElementById('modalCustomsError').style.display = 'none';
+  document.getElementById('newTruckModal').classList.add('is-open');
+  setTimeout(() => inp.focus(), 100);
+}
+function closeAllModals() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('is-open'));
+}
+async function submitNewTruck() {
+  const inp = document.getElementById('truckNumberInput');
+  const errEl = document.getElementById('modalError');
+  const customsSel = document.getElementById('customsSelect');
+  const customsErrEl = document.getElementById('modalCustomsError');
+  const num = inp.value.trim();
+  if (!num) {
+    errEl.textContent = t('error.empty');
+    errEl.style.display = 'block';
+    inp.classList.add('has-error');
+    return;
+  }
+  errEl.style.display = 'none';
+  inp.classList.remove('has-error');
+  if (!customsSel.value) {
+    customsErrEl.textContent = t('error.noCustoms');
+    customsErrEl.style.display = 'block';
+    customsSel.classList.add('has-error');
+    return;
+  }
+  customsErrEl.style.display = 'none';
+  customsSel.classList.remove('has-error');
+
+  try {
+    const created = await MeridianAPI.createTruck({ number: num, customs: customsSel.value });
+    trucks.unshift(created);
+    closeAllModals();
+    renderPills();
+    renderGrid();
+    showToast(t('toast.created').replace('{num}', num), 'success');
+  } catch (err) {
+    errEl.textContent = err.error || 'Не удалось создать заявку';
+    errEl.style.display = 'block';
+    inp.classList.add('has-error');
+  }
+}
+function showToast(text, kind) {
+  const stack = document.getElementById('toastStack');
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = text;
+  stack.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+document.getElementById('newTruckBtn').addEventListener('click', openNewTruckModal);
+document.getElementById('submitNewTruck').addEventListener('click', submitNewTruck);
+document.getElementById('truckNumberInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitNewTruck();
+});
+document.addEventListener('click', e => {
+  const closer = e.target.closest('[data-close]');
+  if (closer && closer.closest('.modal')) closeAllModals();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.querySelector('.modal.is-open')) closeAllModals();
+});
+
+// ============================================================
+// BOOTSTRAP — пользователь + заявки из API
+// ============================================================
+async function bootstrap() {
+  // Заголовок: имя клиента (login) + аватар из инициалов
+  try {
+    const me = await MeridianAPI.me();
+    const nameEl = document.getElementById('userName');
+    const avEl   = document.getElementById('userAvatar');
+    if (nameEl) nameEl.textContent = me.login;
+    if (avEl)   avEl.textContent   = (me.login || '?').slice(0, 2).toUpperCase();
+  } catch (e) {}
+
+  const lbtn = document.getElementById('logoutBtn');
+  if (lbtn) lbtn.addEventListener('click', async () => {
+    try { await MeridianAPI.logout(); } catch (e) {}
+    location.href = '/login';
+  });
+
+  try {
+    const list = await MeridianAPI.listTrucks();
+    trucks = Array.isArray(list) ? list : [];
+  } catch (e) {
+    showToast(e.error || 'Не удалось загрузить заявки', 'error');
+  }
+
+  // Локализация причин проблем: бэкенд возвращает простой `reason`, оборачиваем в reasonByLang
+  // (чтобы существующий рендер с getProblemReason работал без правок).
+  trucks.forEach(tr => {
+    if (Array.isArray(tr.problems)) {
+      tr.problems.forEach(p => {
+        if (p.reason && !p.reasonByLang) p.reasonByLang = { ru: p.reason, zh: p.reason };
+      });
+    }
+  });
+
+  renderPills();
+  renderGrid();
+
+  // Периодическое обновление
+  setInterval(async () => {
+    try {
+      const list = await MeridianAPI.listTrucks();
+      if (Array.isArray(list)) {
+        trucks = list;
+        trucks.forEach(tr => {
+          if (Array.isArray(tr.problems)) {
+            tr.problems.forEach(p => {
+              if (p.reason && !p.reasonByLang) p.reasonByLang = { ru: p.reason, zh: p.reason };
+            });
+          }
+        });
+        renderPills();
+        renderGrid();
+        if (activeTruckId && !trucks.find(x => x.id === activeTruckId)) closeDetail();
+        else if (activeTruckId) renderDetail();
+      }
+    } catch (e) {}
+  }, 30 * 1000);
+}
+
+// Initial render — статика сразу, данные асинхронно
+document.documentElement.setAttribute('lang', currentLang);
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.classList.toggle('is-active', b.dataset.lang === currentLang);
+});
+applyStaticTranslations();
+renderPills();
+renderGrid();
+bootstrap();
+</script>
+
+</body>
+</html>

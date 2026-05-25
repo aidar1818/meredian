@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<title>Управление — ОсОО Меридиан</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --white:        #ffffff;
+    --bg:           #fafafa;
+    --surface:      #ffffff;
+    --surface-2:    #f4f5f7;
+    --border:       #e6e8ec;
+    --border-strong:#d4d7dd;
+
+    --text:         #0a0a0a;
+    --text-2:       #4a4f57;
+    --text-3:       #8a909a;
+
+    --blue:         #1d508c;
+    --blue-hover:   #143f6d;
+    --blue-soft:    #ecf2fa;
+    --blue-line:    #bdd2e7;
+
+    --green:        #0a7f44;
+    --green-soft:   #e6f5ec;
+    --green-line:   #c1e3cf;
+
+    --red:          #c5253a;
+    --red-strong:   #a51b2d;
+    --red-soft:     #fce9ec;
+    --red-line:     #f1c5cd;
+
+    --gray-soft:    #eef0f3;
+
+    --radius-sm: 6px;
+    --radius:    10px;
+    --radius-lg: 14px;
+
+    --shadow:    0 1px 3px rgba(15,20,30,0.06), 0 6px 16px rgba(15,20,30,0.05);
+    --shadow-lg: 0 10px 40px rgba(15,20,30,0.12);
+
+    --f-sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    --f-mono: "Geist Mono", ui-monospace, monospace;
+
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--f-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection { background: var(--blue); color: var(--white); }
+  button { font: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+  input, select, textarea { font: inherit; color: inherit; }
+
+  /* ============ HEADER ============ */
+  .app-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 30;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .brand-mark img {
+    height: 100%;
+    width: auto;
+    display: block;
+  }
+
+  .user-block { display: flex; align-items: center; gap: 14px; }
+  .user-info { text-align: right; line-height: 1.3; }
+  .user-name { font-size: 13.5px; font-weight: 500; }
+  .user-role {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--red-soft); color: var(--red);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px;
+  }
+  .logout-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    color: var(--text-3);
+    display: grid; place-items: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .logout-btn:hover { background: var(--surface-2); color: var(--text); }
+  .logout-btn svg { width: 18px; height: 18px; }
+
+  /* ============ MAIN ============ */
+  .app-main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 32px;
+  }
+
+  .page-header { margin-bottom: 22px; }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .page-header .subtitle {
+    color: var(--text-2);
+    font-size: 14.5px;
+  }
+
+  /* ============ TABS ============ */
+  .tabs-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-3);
+    transition: color 0.15s, box-shadow 0.15s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--text-2); }
+  .tab.is-active {
+    color: var(--text);
+    border-bottom-color: var(--blue);
+  }
+  .tab-count {
+    font-family: var(--f-mono);
+    font-weight: 600;
+    background: var(--surface-2);
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    color: var(--text-2);
+  }
+  .tab.is-active .tab-count {
+    background: var(--blue-soft);
+    color: var(--blue);
+  }
+
+  .tab-panel[hidden] { display: none; }
+
+  /* ============ REPORTS ============ */
+  .reports-head {
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+    padding: 14px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 14px;
+  }
+  .date-picker { display: flex; flex-direction: column; gap: 4px; }
+  .date-picker label { font-size: 11.5px; color: var(--text-3); }
+  .date-picker input {
+    border: 1px solid var(--border); background: #fff;
+    padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px;
+    color: var(--text); min-width: 140px;
+  }
+  .date-picker input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+  .preset-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .preset-chip {
+    padding: 7px 12px; font-size: 12px; border-radius: 999px;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+    color: var(--text-2); white-space: nowrap;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .preset-chip:hover { background: var(--surface-2); color: var(--text); }
+  .preset-chip.is-active {
+    background: var(--text); color: #fff; border-color: var(--text);
+  }
+  .range-label {
+    font-size: 12px; color: var(--text-2);
+    background: var(--surface-2); padding: 6px 10px; border-radius: 999px;
+    font-family: var(--f-mono);
+  }
+  .report-pills { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .report-pill {
+    padding: 9px 16px; font-size: 13px; border-radius: 999px;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+    color: var(--text-2);
+  }
+  .report-pill.is-active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 14px;
+  }
+  .kpi {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .kpi-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .kpi-value { font-size: 22px; font-weight: 600; margin-top: 4px; font-family: var(--f-mono); color: var(--text); }
+  .kpi-value.released { color: var(--green); }
+  .kpi-value.problem  { color: var(--red); }
+  .kpi-value.muted    { color: var(--text-3); }
+
+  .report-table {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .report-table-head, .report-table-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1.5fr) 70px 70px 70px 90px 90px 110px 90px;
+    gap: 10px; align-items: center; padding: 10px 14px;
+    font-size: 12.5px;
+  }
+  .report-table-head {
+    background: var(--surface-2); color: var(--text-3); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 500;
+  }
+  .report-table-row { border-top: 1px solid var(--border); }
+  .report-table-row .name { font-weight: 600; color: var(--text); }
+  .report-table-row .num  { font-family: var(--f-mono); }
+  .report-table-row .num.green { color: var(--green); }
+  .report-table-row .num.red   { color: var(--red); }
+  .report-table-row .num.muted { color: var(--text-3); }
+  .report-table-row .breakdown {
+    display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  }
+  .report-table-row .chip-mini {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px;
+    background: var(--surface-2); color: var(--text-2);
+  }
+  .report-table-row .breakdown-title {
+    font-size: 10px; color: var(--text-3); text-transform: uppercase;
+    letter-spacing: .05em; margin-right: 6px;
+  }
+  .report-table-row .name {
+    display: flex; flex-direction: column; gap: 4px;
+    position: relative;
+  }
+  .report-table-row .name > span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+  .report-table-row .chev { color: var(--text-3); transition: color .15s, transform .15s; }
+  .report-table-row.is-clickable { cursor: pointer; transition: background .12s; }
+  .report-table-row.is-clickable:hover { background: var(--blue-soft); }
+  .report-table-row.is-clickable:hover .chev { color: var(--blue); transform: translateX(2px); }
+  .report-table-row.is-empty { opacity: .55; }
+
+  .report-table-hint {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-3);
+    margin: 0 0 8px;
+  }
+  .report-table-hint svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ============ DETAIL SLIDE-OVER ============ */
+  .detail-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+    z-index: 90;
+  }
+  .detail-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .detail-panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 640px; max-width: 100%; background: #fff;
+    border-left: 1px solid var(--border);
+    box-shadow: -8px 0 32px rgba(0,0,0,0.08);
+    transform: translateX(100%); transition: transform .25s cubic-bezier(0.32, 0.72, 0, 1);
+    z-index: 100; display: flex; flex-direction: column;
+  }
+  .detail-panel.is-open { transform: translateX(0); }
+  .detail-header {
+    padding: 18px 22px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .detail-header .meta {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+  }
+  .detail-header .eyebrow {
+    font-size: 11px; color: var(--text-3); text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .detail-header .title {
+    font-size: 18px; font-weight: 600;
+  }
+  .detail-header .count {
+    font-size: 13px; color: var(--text-2);
+  }
+  .detail-close {
+    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    display: grid; place-items: center; color: var(--text-3);
+  }
+  .detail-close:hover { background: var(--surface-2); color: var(--text); }
+
+  .detail-body {
+    flex: 1; overflow-y: auto; padding: 16px 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .truck-detail-card {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px; background: #fff;
+    border-left: 3px solid var(--blue);
+    transition: border-color .15s;
+  }
+  .truck-detail-card.is-released { border-left-color: var(--green); }
+  .truck-detail-card.is-problem  { border-left-color: var(--red); }
+  .truck-detail-card .row1 {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .truck-detail-card .number {
+    font-family: var(--f-mono); font-weight: 600; font-size: 14px;
+  }
+  .truck-detail-card .tid {
+    font-family: var(--f-mono); font-size: 11px; color: var(--text-3);
+  }
+  .truck-detail-card .stage-tag {
+    font-size: 11.5px; padding: 2px 8px; border-radius: 999px;
+    background: var(--surface-2); color: var(--text-2);
+  }
+  .truck-detail-card .meta-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px 12px; font-size: 12.5px;
+  }
+  .truck-detail-card .meta-row .label {
+    color: var(--text-3); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .truck-detail-card .meta-row .val { font-family: var(--f-mono); }
+  .truck-detail-card .meta-row .val.empty { color: var(--text-3); font-style: italic; }
+
+  .detail-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px; padding: 14px 22px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+  }
+  .detail-stat { font-size: 11px; }
+  .detail-stat .l { color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+  .detail-stat .v { font-family: var(--f-mono); font-size: 16px; font-weight: 600; margin-top: 2px; }
+  .detail-stat .v.green { color: var(--green); }
+  .detail-stat .v.red   { color: var(--red); }
+
+  @media (max-width: 720px) {
+    .detail-panel { width: 100%; }
+    .detail-header { padding: 14px 16px; }
+    .detail-body   { padding: 12px 16px; }
+    .detail-stats  { padding: 12px 16px; }
+  }
+
+  @media (max-width: 980px) {
+    .report-table-head, .report-table-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .report-table-head > div:nth-child(n+3) { display: none; }
+    .report-table-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+    .report-table-row .num::before {
+      content: attr(data-label);
+      color: var(--text-3); font-family: var(--f-sans);
+      margin-right: 8px; text-transform: uppercase; font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  /* ============ TOOLBAR ============ */
+  .panel-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .search-input {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+    max-width: 340px;
+  }
+  .search-input svg {
+    position: absolute;
+    left: 12px;
+    top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px;
+    color: var(--text-3);
+    pointer-events: none;
+  }
+  .search-input input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px 0 38px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+  }
+  .search-input input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .filter-select {
+    height: 38px;
+    padding: 0 32px 0 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a909a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    outline: none;
+    min-width: 160px;
+  }
+  .filter-select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .toolbar-spacer { flex: 1; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    height: 38px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.05s;
+    white-space: nowrap;
+  }
+  .btn:active:not(:disabled) { transform: translateY(0.5px); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .btn:disabled { cursor: not-allowed; opacity: 0.55; }
+
+  .btn-primary { background: var(--blue); color: var(--white); }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-hover); }
+
+  .btn-secondary {
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover:not(:disabled) { background: var(--surface-2); border-color: var(--text-3); }
+
+  .btn-danger {
+    background: var(--surface);
+    color: var(--red);
+    border: 1px solid var(--red-line);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--red-soft); }
+
+  .btn-icon {
+    width: 32px; height: 32px;
+    padding: 0;
+    border-radius: 8px;
+    color: var(--text-3);
+  }
+  .btn-icon:hover { background: var(--surface-2); color: var(--text); }
+  .btn-icon.danger:hover { background: var(--red-soft); color: var(--red); }
+
+  /* ============ DATA LIST ============ */
+  .data-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .data-list-head {
+    display: grid;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .data-row {
+    display: grid;
+    gap: 16px;
+    padding: 14px 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: var(--surface-2); }
+  .data-row.is-inactive { opacity: 0.6; }
+
+  /* USERS table layout */
+  .users-list .data-list-head,
+  .users-list .data-row {
+    grid-template-columns: 220px 200px 120px 1fr auto;
+  }
+
+  /* ROLES list — single column with chips */
+  .roles-list .data-row {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+  .role-name-block { display: flex; flex-direction: column; gap: 6px; }
+  .role-actions { display: flex; gap: 4px; }
+
+  .cell-primary {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .cell-secondary {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .cell-meta {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .badge-active   { background: var(--green-soft); color: var(--green); }
+  .badge-inactive { background: var(--gray-soft); color: var(--text-3); }
+  .badge-system   { background: var(--blue-soft); color: var(--blue); }
+
+  /* CHIPS — для доступа к страницам */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 11.5px;
+    color: var(--text-2);
+    font-weight: 500;
+  }
+  .chip-empty {
+    background: var(--red-soft);
+    border-color: var(--red-line);
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .role-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .role-meta {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    padding: 56px 20px;
+    text-align: center;
+    color: var(--text-3);
+  }
+  .empty-state-icon { margin-bottom: 12px; opacity: 0.45; }
+  .empty-state h3 { font-size: 16px; color: var(--text-2); margin-bottom: 4px; }
+
+  /* ============ MODAL ============ */
+  .modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; visibility: hidden;
+    padding: 20px;
+  }
+  .modal.is-open { pointer-events: auto; visibility: visible; }
+  .modal-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(15,20,30,0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .modal.is-open .modal-backdrop { opacity: 1; }
+  .modal-card {
+    position: relative;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 460px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.96) translateY(8px); opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal.is-open .modal-card { transform: scale(1) translateY(0); opacity: 1; }
+  .modal-header { padding: 20px 24px 4px; }
+  .modal-title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .modal-subtitle { font-size: 13.5px; color: var(--text-2); margin-top: 4px; }
+  .modal-body { padding: 14px 24px 18px; flex: 1; overflow-y: auto; }
+  .modal-footer {
+    padding: 14px 24px 20px;
+    display: flex; gap: 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .modal-footer .btn { flex: 1; }
+
+  .form-field { margin-bottom: 14px; }
+  .form-field:last-child { margin-bottom: 0; }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .form-label .req { color: var(--red); margin-left: 2px; }
+  .form-input {
+    width: 100%;
+    padding: 0 12px;
+    height: 42px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--white);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+  .form-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29,80,140,0.14);
+  }
+  .form-input.has-error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(197,37,58,0.10);
+  }
+  .form-input.mono { font-family: var(--f-mono); }
+  .form-error { color: var(--red); font-size: 12.5px; margin-top: 6px; }
+  .form-help  { color: var(--text-3); font-size: 12.5px; margin-top: 6px; }
+
+  /* CHECKBOX LIST for role pages */
+  .pages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 8px;
+  }
+  .page-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.12s;
+    border: 1px solid transparent;
+  }
+  .page-check:hover { border-color: var(--border); }
+  .page-check.is-checked {
+    background: var(--blue-soft);
+    border-color: var(--blue-line);
+  }
+  .page-check input[type="checkbox"] {
+    width: 17px; height: 17px;
+    accent-color: var(--blue);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .page-check-label {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .page-check-id {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  /* CONFIRM dialog body — special styling */
+  .confirm-message {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .confirm-target {
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    word-break: break-all;
+  }
+
+  /* TOAST */
+  .toast-stack {
+    position: fixed;
+    bottom: calc(20px + var(--safe-bottom));
+    right: 20px;
+    z-index: 300;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--text);
+    color: var(--white);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), toastOut 0.3s 3.5s forwards;
+    max-width: 320px;
+  }
+  .toast.success { background: var(--green); }
+  .toast.error   { background: var(--red); }
+  @keyframes toastIn  { from { transform: translateX(20px); opacity: 0; } }
+  @keyframes toastOut { to   { transform: translateX(20px); opacity: 0; } }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 860px) {
+    .app-header { padding: 0 16px; height: 56px; }
+    .app-main { padding: 20px 16px 32px; }
+    .page-header h1 { font-size: 24px; }
+    .user-info { display: none; }
+
+    .users-list .data-list-head { display: none; }
+    .users-list .data-row {
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      padding: 12px 14px;
+      grid-template-areas:
+        "login badge"
+        "role role"
+        "meta actions";
+    }
+    .users-list .cell-login { grid-area: login; }
+    .users-list .cell-role  { grid-area: role; }
+    .users-list .cell-badge { grid-area: badge; align-self: start; }
+    .users-list .cell-meta-row  { grid-area: meta; }
+    .users-list .cell-actions   { grid-area: actions; align-self: end; }
+
+    .panel-toolbar { gap: 8px; }
+    .search-input { max-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .app-header { padding: 0 14px; }
+    .app-main { padding: 16px 12px 28px; }
+    .tab { padding: 10px 12px; font-size: 13.5px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .data-row { animation: fadeUp 0.3s both; }
+  .data-row:nth-child(1) { animation-delay: 0.02s; }
+  .data-row:nth-child(2) { animation-delay: 0.04s; }
+  .data-row:nth-child(3) { animation-delay: 0.06s; }
+  .data-row:nth-child(4) { animation-delay: 0.08s; }
+  .data-row:nth-child(5) { animation-delay: 0.10s; }
+  .data-row:nth-child(6) { animation-delay: 0.12s; }
+</style>
+</head>
+
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-mark">
+      <img src="data:image/jpeg;base64,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" alt="ОсОО Меридиан — Таможенный представитель" />
+    </div>
+  </div>
+
+  <div class="user-block">
+    <div class="user-info">
+      <div class="user-name" id="userName">—</div>
+      <div class="user-role" id="userHeaderRole">Администратор</div>
+    </div>
+    <div class="user-avatar" id="userAvatar">—</div>
+    <button class="logout-btn" id="logoutBtn" title="Выйти">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="app-main">
+
+  <div class="page-header">
+    <h1>Управление</h1>
+    <p class="subtitle">Пользователи и роли системы</p>
+  </div>
+
+  <div class="tabs-row">
+    <button class="tab is-active" data-tab="users">
+      Пользователи <span class="tab-count" id="usersCount">0</span>
+    </button>
+    <button class="tab" data-tab="roles">
+      Роли <span class="tab-count" id="rolesCount">0</span>
+    </button>
+    <button class="tab" data-tab="reports">
+      Отчёты
+    </button>
+  </div>
+
+  <!-- ============ USERS PANEL ============ -->
+  <div class="tab-panel" data-panel="users">
+    <div class="panel-toolbar">
+      <div class="search-input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="userSearch" placeholder="Поиск по логину..." />
+      </div>
+      <select class="filter-select" id="userRoleFilter">
+        <option value="">Все роли</option>
+      </select>
+      <select class="filter-select" id="userStatusFilter">
+        <option value="">Все статусы</option>
+        <option value="ACTIVE">Активные</option>
+        <option value="INACTIVE">Деактивированные</option>
+      </select>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-primary" id="newUserBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Новый пользователь
+      </button>
+    </div>
+
+    <div class="data-list users-list">
+      <div class="data-list-head">
+        <div>Логин</div>
+        <div>Роль</div>
+        <div>Статус</div>
+        <div>Создан</div>
+        <div></div>
+      </div>
+      <div id="usersList"></div>
+    </div>
+  </div>
+
+  <!-- ============ ROLES PANEL ============ -->
+  <div class="tab-panel" data-panel="roles" hidden>
+    <div class="panel-toolbar">
+      <div class="search-input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="roleSearch" placeholder="Поиск по названию..." />
+      </div>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-primary" id="newRoleBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Новая роль
+      </button>
+    </div>
+
+    <div class="data-list roles-list">
+      <div id="rolesList"></div>
+    </div>
+  </div>
+
+  <!-- ============ REPORTS PANEL ============ -->
+  <div class="tab-panel" data-panel="reports" hidden>
+    <div class="reports-head">
+      <div class="date-picker">
+        <label>С</label>
+        <input type="date" id="repFrom" />
+      </div>
+      <div class="date-picker">
+        <label>По</label>
+        <input type="date" id="repTo" />
+      </div>
+      <div class="preset-chips" id="presetChips">
+        <button class="preset-chip" data-preset="today">Сегодня</button>
+        <button class="preset-chip" data-preset="7d">7 дней</button>
+        <button class="preset-chip is-active" data-preset="30d">30 дней</button>
+        <button class="preset-chip" data-preset="this_month">Этот месяц</button>
+        <button class="preset-chip" data-preset="prev_month">Прошлый месяц</button>
+        <button class="preset-chip" data-preset="this_year">Этот год</button>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <span class="range-label" id="repRangeLabel">—</span>
+    </div>
+
+    <!-- сводные KPI -->
+    <div class="kpi-grid" id="repSummary"></div>
+
+    <!-- переключатель типа отчёта -->
+    <div class="report-pills">
+      <button class="report-pill is-active" data-report="operators">Операторы</button>
+      <button class="report-pill" data-report="clients">Клиенты</button>
+      <button class="report-pill" data-report="customs">Таможни</button>
+    </div>
+
+    <div id="reportTable"></div>
+  </div>
+
+</main>
+
+<!-- ============ MODAL: NEW USER ============ -->
+<div class="modal" id="newUserModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Новый пользователь</div>
+      <div class="modal-subtitle">Создание учётной записи с привязкой к роли</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="newUserLogin">Логин <span class="req">*</span></label>
+        <input class="form-input mono" type="text" id="newUserLogin" placeholder="напр. operator2" autocomplete="off" />
+        <div class="form-help">Только латинские буквы и цифры. Без пробелов и спецсимволов.</div>
+        <div class="form-error" id="newUserLoginError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newUserPassword">Пароль <span class="req">*</span></label>
+        <input class="form-input mono" type="text" id="newUserPassword" placeholder="минимум 4 символа" autocomplete="new-password" />
+        <div class="form-help">Передаётся в открытом виде, хэшируется на сервере.</div>
+        <div class="form-error" id="newUserPasswordError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="newUserRole">Роль <span class="req">*</span></label>
+        <select class="form-input" id="newUserRole"></select>
+        <div class="form-error" id="newUserRoleError" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitNewUser">Создать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: EDIT USER (только пароль) ============ -->
+<div class="modal" id="editUserModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Смена пароля</div>
+      <div class="modal-subtitle" id="editUserSubtitle">—</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="editUserPassword">Новый пароль <span class="req">*</span></label>
+        <input class="form-input mono" type="text" id="editUserPassword" placeholder="минимум 4 символа" autocomplete="new-password" />
+        <div class="form-help">Логин и роль изменить нельзя — только пароль.</div>
+        <div class="form-error" id="editUserPasswordError" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitEditUser">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: NEW ROLE ============ -->
+<div class="modal" id="newRoleModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Новая роль</div>
+      <div class="modal-subtitle">Название и набор доступных страниц</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="newRoleName">Название <span class="req">*</span></label>
+        <input class="form-input" type="text" id="newRoleName" placeholder="напр. Оператор Торугарт" autocomplete="off" />
+        <div class="form-error" id="newRoleNameError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Доступ к страницам</label>
+        <div class="pages-list" id="newRolePages"></div>
+        <div class="form-help">Можно не выбрать ни одной — пользователь с такой ролью не увидит ни одной страницы.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitNewRole">Создать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: EDIT ROLE ============ -->
+<div class="modal" id="editRoleModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Редактирование роли</div>
+      <div class="modal-subtitle" id="editRoleSubtitle">—</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label class="form-label" for="editRoleName">Название <span class="req">*</span></label>
+        <input class="form-input" type="text" id="editRoleName" autocomplete="off" />
+        <div class="form-error" id="editRoleNameError" style="display:none;"></div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Доступ к страницам</label>
+        <div class="pages-list" id="editRolePages"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-primary" id="submitEditRole">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: CONFIRM ============ -->
+<div class="modal" id="confirmModal">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" style="max-width: 400px;">
+    <div class="modal-header">
+      <div class="modal-title" id="confirmTitle">Подтверждение</div>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-message" id="confirmMessage">—</div>
+      <div class="confirm-target" id="confirmTarget" style="display:none;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Отмена</button>
+      <button class="btn btn-danger" id="confirmAction">Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DETAIL SLIDE-OVER (отчёты) ============ -->
+<div class="detail-backdrop" id="detailBackdrop" data-close-detail></div>
+<aside class="detail-panel" id="detailPanel" aria-hidden="true">
+  <div class="detail-header">
+    <div class="meta">
+      <div class="eyebrow" id="detailEyebrow">—</div>
+      <div class="title"   id="detailTitle">—</div>
+      <div class="count"   id="detailCount">—</div>
+    </div>
+    <button class="detail-close" data-close-detail title="Закрыть">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="detail-stats" id="detailStats"></div>
+  <div class="detail-body" id="detailBody"></div>
+</aside>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="/assets/api.js"></script>
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+let PAGES = [
+  { id: 'operator', name: 'Центр оформления',  description: 'Управление заявками и операциями' },
+  { id: 'client',   name: 'Кабинет клиента',   description: 'Подача и отслеживание заявок' },
+  { id: 'admin',    name: 'Управление',        description: 'Пользователи и роли (эта страница)' },
+];
+const LOGIN_RE = /^[a-zA-Z0-9]+$/;
+const PASSWORD_MIN = 4;
+const DAY = 24 * 60 * 60 * 1000;
+
+// ============================================================
+// DATA — заполняется из API
+// ============================================================
+let roles = [];
+let users = [];
+
+// ============================================================
+// STATE
+// ============================================================
+let activeTab = 'users';
+let userFilters = { search: '', roleId: '', status: '' };
+let roleFilters = { search: '' };
+let editingUserId = null;
+let editingRoleId = null;
+let confirmCallback = null;
+
+// ============================================================
+// HELPERS
+// ============================================================
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formatDateTime(ts) {
+  const d = new Date(ts);
+  const today = new Date();
+  const isToday = d.toDateString() === today.toDateString();
+  const yest = new Date(); yest.setDate(yest.getDate() - 1);
+  const isYesterday = d.toDateString() === yest.toDateString();
+  const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (isToday) return `Сегодня, ${time}`;
+  if (isYesterday) return `Вчера, ${time}`;
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
+}
+
+function formatRelative(ts) {
+  const diff = Date.now() - ts;
+  const days = Math.floor(diff / DAY);
+  if (days === 0) return 'сегодня';
+  if (days === 1) return 'вчера';
+  if (days < 7) return days + ' дн. назад';
+  if (days < 30) return Math.floor(days/7) + ' нед. назад';
+  if (days < 365) return Math.floor(days/30) + ' мес. назад';
+  return Math.floor(days/365) + ' г. назад';
+}
+
+function getRoleById(id) { return roles.find(r => r.id === id); }
+function getPageById(id) { return PAGES.find(p => p.id === id); }
+function getUsersOfRole(roleId) { return users.filter(u => u.roleId === roleId); }
+
+// ============================================================
+// TABS
+// ============================================================
+function setActiveTab(name) {
+  activeTab = name;
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('is-active', t.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    p.hidden = p.dataset.panel !== name;
+  });
+}
+
+// ============================================================
+// COUNTS
+// ============================================================
+function renderCounts() {
+  document.getElementById('usersCount').textContent = users.length;
+  document.getElementById('rolesCount').textContent = roles.length;
+}
+
+// ============================================================
+// ROLE FILTER (зависит от ролей)
+// ============================================================
+function renderRoleFilter() {
+  const sel = document.getElementById('userRoleFilter');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Все роли</option>' +
+    roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+  if (roles.some(r => r.id === current)) sel.value = current;
+}
+
+// ============================================================
+// USERS LIST
+// ============================================================
+function renderUsers() {
+  const list = document.getElementById('usersList');
+  let filtered = [...users];
+
+  if (userFilters.search) {
+    const s = userFilters.search.toLowerCase();
+    filtered = filtered.filter(u => u.login.toLowerCase().includes(s));
+  }
+  if (userFilters.roleId) filtered = filtered.filter(u => u.roleId === userFilters.roleId);
+  if (userFilters.status) filtered = filtered.filter(u => u.status === userFilters.status);
+
+  filtered.sort((a, b) => {
+    if (a.status !== b.status) return a.status === 'ACTIVE' ? -1 : 1;
+    return b.createdAt - a.createdAt;
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h3>Никого не нашлось</h3>
+        <p>Попробуйте сбросить фильтры</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(u => {
+    const role = getRoleById(u.roleId);
+    const isAdmin = role && role.id === 'role_admin';
+    const badge = u.status === 'ACTIVE'
+      ? '<span class="badge badge-active"><span class="badge-dot"></span>Активный</span>'
+      : '<span class="badge badge-inactive">Деактивирован</span>';
+    return `
+      <div class="data-row ${u.status === 'INACTIVE' ? 'is-inactive' : ''}" data-user-id="${u.id}">
+        <div class="cell-login">
+          <div class="cell-primary">${u.login}</div>
+          <div class="cell-secondary" style="font-family:var(--f-mono);font-size:11px;color:var(--text-3);">${u.id}</div>
+        </div>
+        <div class="cell-role cell-secondary">${role ? role.name : '<em style="color:var(--red)">роль не найдена</em>'}</div>
+        <div class="cell-badge">${badge}</div>
+        <div class="cell-meta-row cell-meta">${formatDateTime(u.createdAt)} · ${formatRelative(u.createdAt)}</div>
+        <div class="cell-actions" style="display:flex;gap:4px;">
+          ${u.status === 'ACTIVE' ? `
+            <button class="btn-icon" title="Сменить пароль" onclick="openEditUser('${u.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            ${isAdmin && getActiveAdminCount() <= 1 ? '' : `
+              <button class="btn-icon danger" title="Деактивировать" onclick="askDeactivateUser('${u.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+              </button>
+            `}
+          ` : `
+            <button class="btn-icon" title="Активировать пользователя" onclick="askActivateUser('${u.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9"/>
+                <polyline points="3 4 3 10 9 10"/>
+              </svg>
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getActiveAdminCount() {
+  return users.filter(u => u.status === 'ACTIVE' && u.roleId === 'role_admin').length;
+}
+
+// ============================================================
+// ROLES LIST
+// ============================================================
+function renderRoles() {
+  const list = document.getElementById('rolesList');
+  let filtered = [...roles];
+
+  if (roleFilters.search) {
+    const s = roleFilters.search.toLowerCase();
+    filtered = filtered.filter(r => r.name.toLowerCase().includes(s));
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <h3>Ролей не найдено</h3>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => {
+    const userCount = getUsersOfRole(r.id).length;
+    const activeUserCount = getUsersOfRole(r.id).filter(u => u.status === 'ACTIVE').length;
+    const chips = r.pages.length === 0
+      ? '<span class="chip chip-empty">нет доступа ни к одной странице</span>'
+      : r.pages.map(pId => {
+          const p = getPageById(pId);
+          return p ? `<span class="chip">${p.name}</span>` : '';
+        }).join('');
+    const canDelete = !r.isSystem && userCount === 0;
+    return `
+      <div class="data-row" data-role-id="${r.id}">
+        <div class="role-name-block">
+          <div>
+            <span class="role-name">${r.name}</span>
+            ${r.isSystem ? '<span class="badge badge-system" style="margin-left:8px;">Системная</span>' : ''}
+          </div>
+          <div class="chips">${chips}</div>
+          <div class="role-meta">${userCount === 0 ? 'Нет пользователей' : `Пользователей: ${activeUserCount} активных${userCount > activeUserCount ? ` / ${userCount - activeUserCount} деактивированных` : ''}`}</div>
+        </div>
+        <div class="role-actions">
+          <button class="btn-icon" title="Редактировать" onclick="openEditRole('${r.id}')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          ${!r.isSystem ? `
+            <button class="btn-icon danger" title="${canDelete ? 'Удалить' : 'Есть привязанные пользователи — удаление невозможно'}" ${canDelete ? '' : 'disabled style="opacity:0.4;cursor:not-allowed;"'} onclick="${canDelete ? `askDeleteRole('${r.id}')` : `showToast('Невозможно удалить роль — есть привязанные пользователи', 'error')`}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// PAGES CHECKBOXES (для модалок ролей)
+// ============================================================
+function renderPagesChecks(containerId, selectedIds, namePrefix) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = PAGES.map(p => {
+    const checked = selectedIds.includes(p.id);
+    return `
+      <label class="page-check ${checked ? 'is-checked' : ''}">
+        <input type="checkbox" data-page-id="${p.id}" ${checked ? 'checked' : ''} />
+        <div style="flex:1;">
+          <div class="page-check-label">${p.name}</div>
+          <div class="page-check-id">${p.id} · ${p.description}</div>
+        </div>
+      </label>
+    `;
+  }).join('');
+  // Update visual state on change
+  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('.page-check').classList.toggle('is-checked', cb.checked);
+    });
+  });
+}
+function getSelectedPages(containerId) {
+  return Array.from(document.getElementById(containerId).querySelectorAll('input[type="checkbox"]:checked'))
+    .map(cb => cb.dataset.pageId);
+}
+
+// ============================================================
+// USER MODALS
+// ============================================================
+function openNewUserModal() {
+  document.getElementById('newUserLogin').value = '';
+  document.getElementById('newUserPassword').value = '';
+  document.getElementById('newUserLoginError').style.display = 'none';
+  document.getElementById('newUserPasswordError').style.display = 'none';
+  document.getElementById('newUserRoleError').style.display = 'none';
+  document.getElementById('newUserLogin').classList.remove('has-error');
+  document.getElementById('newUserPassword').classList.remove('has-error');
+  // Заполняем селект ролей
+  const roleSel = document.getElementById('newUserRole');
+  roleSel.innerHTML = '<option value="">Выберите роль</option>' +
+    roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+  roleSel.value = '';
+  document.getElementById('newUserModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('newUserLogin').focus(), 100);
+}
+
+async function submitNewUser() {
+  const loginEl = document.getElementById('newUserLogin');
+  const pwdEl = document.getElementById('newUserPassword');
+  const roleEl = document.getElementById('newUserRole');
+  const loginErr = document.getElementById('newUserLoginError');
+  const pwdErr = document.getElementById('newUserPasswordError');
+  const roleErr = document.getElementById('newUserRoleError');
+
+  [loginErr, pwdErr, roleErr].forEach(e => e.style.display = 'none');
+  [loginEl, pwdEl].forEach(e => e.classList.remove('has-error'));
+
+  const login = loginEl.value.trim();
+  const password = pwdEl.value;
+  const roleId = roleEl.value;
+
+  // Клиентская валидация — для UX (сервер всё равно повторит).
+  if (!login) {
+    loginErr.textContent = 'Введите логин';
+    loginErr.style.display = 'block';
+    loginEl.classList.add('has-error');
+    return;
+  }
+  if (!LOGIN_RE.test(login)) {
+    loginErr.textContent = 'Логин содержит недопустимые символы. Разрешены только латинские буквы и цифры.';
+    loginErr.style.display = 'block';
+    loginEl.classList.add('has-error');
+    return;
+  }
+  if (!password || password.length < PASSWORD_MIN) {
+    pwdErr.textContent = `Пароль слишком короткий (минимум ${PASSWORD_MIN} символа)`;
+    pwdErr.style.display = 'block';
+    pwdEl.classList.add('has-error');
+    return;
+  }
+  if (!roleId) {
+    roleErr.textContent = 'Выберите роль';
+    roleErr.style.display = 'block';
+    return;
+  }
+
+  try {
+    const created = await MeridianAPI.createUser({ login, password, roleId });
+    users.unshift(created);
+    closeAllModals();
+    renderAll();
+    showToast(`Пользователь ${login} создан`, 'success');
+  } catch (err) {
+    const msg = err.error || 'Не удалось создать пользователя';
+    // Пытаемся подсветить нужное поле
+    if (/логин|login/i.test(msg)) {
+      loginErr.textContent = msg; loginErr.style.display = 'block'; loginEl.classList.add('has-error');
+    } else if (/пароль|password/i.test(msg)) {
+      pwdErr.textContent = msg; pwdErr.style.display = 'block'; pwdEl.classList.add('has-error');
+    } else if (/роль|role/i.test(msg)) {
+      roleErr.textContent = msg; roleErr.style.display = 'block';
+    } else {
+      showToast(msg, 'error');
+    }
+  }
+}
+
+function openEditUser(id) {
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  editingUserId = id;
+  const role = getRoleById(u.roleId);
+  document.getElementById('editUserSubtitle').innerHTML =
+    `<strong style="font-family:var(--f-mono)">${u.login}</strong> · ${role ? role.name : '?'}`;
+  document.getElementById('editUserPassword').value = '';
+  document.getElementById('editUserPasswordError').style.display = 'none';
+  document.getElementById('editUserPassword').classList.remove('has-error');
+  document.getElementById('editUserModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('editUserPassword').focus(), 100);
+}
+
+async function submitEditUser() {
+  const u = users.find(x => x.id === editingUserId);
+  if (!u) return;
+  const pwdEl = document.getElementById('editUserPassword');
+  const pwdErr = document.getElementById('editUserPasswordError');
+  pwdErr.style.display = 'none';
+  pwdEl.classList.remove('has-error');
+  const password = pwdEl.value;
+  if (!password || password.length < PASSWORD_MIN) {
+    pwdErr.textContent = `Пароль слишком короткий (минимум ${PASSWORD_MIN} символа)`;
+    pwdErr.style.display = 'block';
+    pwdEl.classList.add('has-error');
+    return;
+  }
+  try {
+    await MeridianAPI.setUserPassword(u.id, password);
+    closeAllModals();
+    showToast('Пароль обновлён', 'success');
+  } catch (err) {
+    pwdErr.textContent = err.error || 'Не удалось обновить пароль';
+    pwdErr.style.display = 'block';
+    pwdEl.classList.add('has-error');
+  }
+}
+
+function askActivateUser(id) {
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  openConfirm({
+    title: 'Активировать пользователя?',
+    message: 'Пользователь снова сможет войти в систему со своим логином и текущим паролем.',
+    target: u.login,
+    onConfirm: async () => {
+      try {
+        await MeridianAPI.activateUser(u.id);
+        u.status = 'ACTIVE';
+        renderAll();
+        showToast(`Пользователь ${u.login} активирован`, 'success');
+      } catch (err) {
+        showToast(err.error || 'Не удалось активировать', 'error');
+      }
+    }
+  });
+}
+
+function askDeactivateUser(id) {
+  const u = users.find(x => x.id === id);
+  if (!u) return;
+  if (u.roleId === 'role_admin' && getActiveAdminCount() <= 1) {
+    showToast('Нельзя деактивировать единственного активного администратора', 'error');
+    return;
+  }
+  openConfirm({
+    title: 'Деактивировать пользователя?',
+    message: 'Запись останется в базе, но войти в систему пользователь не сможет.',
+    target: u.login,
+    onConfirm: async () => {
+      try {
+        await MeridianAPI.deactivateUser(u.id);
+        u.status = 'INACTIVE';
+        renderAll();
+        showToast(`Пользователь ${u.login} деактивирован`);
+      } catch (err) {
+        showToast(err.error || 'Не удалось деактивировать', 'error');
+      }
+    }
+  });
+}
+
+// ============================================================
+// ROLE MODALS
+// ============================================================
+function openNewRoleModal() {
+  document.getElementById('newRoleName').value = '';
+  document.getElementById('newRoleNameError').style.display = 'none';
+  document.getElementById('newRoleName').classList.remove('has-error');
+  renderPagesChecks('newRolePages', []);
+  document.getElementById('newRoleModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('newRoleName').focus(), 100);
+}
+
+async function submitNewRole() {
+  const nameEl = document.getElementById('newRoleName');
+  const nameErr = document.getElementById('newRoleNameError');
+  nameErr.style.display = 'none';
+  nameEl.classList.remove('has-error');
+  const name = nameEl.value.trim();
+  if (!name) {
+    nameErr.textContent = 'Название роли не может быть пустым';
+    nameErr.style.display = 'block';
+    nameEl.classList.add('has-error');
+    return;
+  }
+  const selectedPages = getSelectedPages('newRolePages');
+  try {
+    const created = await MeridianAPI.createRole({ name, pages: selectedPages });
+    roles.push(created);
+    closeAllModals();
+    renderAll();
+    showToast(`Роль «${name}» создана`, 'success');
+  } catch (err) {
+    nameErr.textContent = err.error || 'Не удалось создать роль';
+    nameErr.style.display = 'block';
+    nameEl.classList.add('has-error');
+  }
+}
+
+function openEditRole(id) {
+  const r = getRoleById(id);
+  if (!r) return;
+  editingRoleId = id;
+  document.getElementById('editRoleSubtitle').innerHTML =
+    `${r.isSystem ? '<span style="color:var(--blue);font-weight:600;">Системная роль:</span> ' : ''}пользователей с этой ролью: ${getUsersOfRole(id).length}`;
+  document.getElementById('editRoleName').value = r.name;
+  document.getElementById('editRoleNameError').style.display = 'none';
+  document.getElementById('editRoleName').classList.remove('has-error');
+  renderPagesChecks('editRolePages', r.pages);
+  document.getElementById('editRoleModal').classList.add('is-open');
+  setTimeout(() => document.getElementById('editRoleName').focus(), 100);
+}
+
+async function submitEditRole() {
+  const r = getRoleById(editingRoleId);
+  if (!r) return;
+  const nameEl = document.getElementById('editRoleName');
+  const nameErr = document.getElementById('editRoleNameError');
+  nameErr.style.display = 'none';
+  nameEl.classList.remove('has-error');
+  const name = nameEl.value.trim();
+  if (!name) {
+    nameErr.textContent = 'Название роли не может быть пустым';
+    nameErr.style.display = 'block';
+    nameEl.classList.add('has-error');
+    return;
+  }
+  const pages = getSelectedPages('editRolePages');
+  try {
+    const updated = await MeridianAPI.updateRole(r.id, { name, pages });
+    const i = roles.findIndex(x => x.id === r.id);
+    if (i >= 0) roles[i] = updated;
+    closeAllModals();
+    renderAll();
+    showToast(`Роль «${name}» обновлена`, 'success');
+  } catch (err) {
+    nameErr.textContent = err.error || 'Не удалось обновить роль';
+    nameErr.style.display = 'block';
+    nameEl.classList.add('has-error');
+  }
+}
+
+function askDeleteRole(id) {
+  const r = getRoleById(id);
+  if (!r) return;
+  if (r.isSystem) {
+    showToast('Системную роль нельзя удалить', 'error');
+    return;
+  }
+  if (getUsersOfRole(id).length > 0) {
+    showToast('Невозможно удалить роль — есть привязанные пользователи', 'error');
+    return;
+  }
+  openConfirm({
+    title: 'Удалить роль?',
+    message: 'Действие необратимо.',
+    target: r.name,
+    onConfirm: async () => {
+      try {
+        await MeridianAPI.deleteRole(id);
+        roles = roles.filter(x => x.id !== id);
+        renderAll();
+        showToast(`Роль «${r.name}» удалена`);
+      } catch (err) {
+        showToast(err.error || 'Не удалось удалить роль', 'error');
+      }
+    }
+  });
+}
+
+// ============================================================
+// CONFIRM DIALOG
+// ============================================================
+function openConfirm({ title, message, target, onConfirm }) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  const targetEl = document.getElementById('confirmTarget');
+  if (target) {
+    targetEl.textContent = target;
+    targetEl.style.display = 'block';
+  } else {
+    targetEl.style.display = 'none';
+  }
+  confirmCallback = onConfirm;
+  document.getElementById('confirmModal').classList.add('is-open');
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function closeAllModals() {
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('is-open'));
+  confirmCallback = null;
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(text, kind) {
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div');
+  t.className = 'toast' + (kind ? ' ' + kind : '');
+  t.textContent = text;
+  stack.appendChild(t);
+  setTimeout(() => t.remove(), 4200);
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
+function renderAll() {
+  renderCounts();
+  renderRoleFilter();
+  renderUsers();
+  renderRoles();
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => setActiveTab(t.dataset.tab));
+});
+
+document.getElementById('userSearch').addEventListener('input', e => {
+  userFilters.search = e.target.value;
+  renderUsers();
+});
+document.getElementById('userRoleFilter').addEventListener('change', e => {
+  userFilters.roleId = e.target.value;
+  renderUsers();
+});
+document.getElementById('userStatusFilter').addEventListener('change', e => {
+  userFilters.status = e.target.value;
+  renderUsers();
+});
+document.getElementById('roleSearch').addEventListener('input', e => {
+  roleFilters.search = e.target.value;
+  renderRoles();
+});
+
+document.getElementById('newUserBtn').addEventListener('click', openNewUserModal);
+document.getElementById('submitNewUser').addEventListener('click', submitNewUser);
+document.getElementById('submitEditUser').addEventListener('click', submitEditUser);
+document.getElementById('newRoleBtn').addEventListener('click', openNewRoleModal);
+document.getElementById('submitNewRole').addEventListener('click', submitNewRole);
+document.getElementById('submitEditRole').addEventListener('click', submitEditRole);
+
+document.getElementById('confirmAction').addEventListener('click', () => {
+  const cb = confirmCallback;
+  closeAllModals();
+  if (cb) cb();
+});
+
+document.addEventListener('click', e => {
+  if (e.target.matches('[data-close]') || e.target.closest('[data-close]')) {
+    closeAllModals();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.querySelector('.modal.is-open')) closeAllModals();
+  if (e.key === 'Enter' && document.querySelector('.modal.is-open')) {
+    // Submit if in input field
+    const active = document.activeElement;
+    if (active && active.tagName === 'INPUT') {
+      if (document.getElementById('newUserModal').classList.contains('is-open')) submitNewUser();
+      else if (document.getElementById('editUserModal').classList.contains('is-open')) submitEditUser();
+      else if (document.getElementById('newRoleModal').classList.contains('is-open')) submitNewRole();
+      else if (document.getElementById('editRoleModal').classList.contains('is-open')) submitEditRole();
+    }
+  }
+});
+
+// ============================================================
+// REPORTS
+// ============================================================
+const reportState = {
+  from: null,        // ms (UTC midnight)
+  to: null,          // ms (UTC, exclusive)
+  preset: '30d',
+  active: 'operators',
+};
+
+function fmtDateInput(ts) {
+  // YYYY-MM-DD в локальной таймзоне (для <input type="date">)
+  const d = new Date(ts);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function fmtRangeHuman(from, to) {
+  const a = new Date(from), b = new Date(to - 1);
+  const days = Math.max(1, Math.round((to - from) / 86400000));
+  const fmt = d => `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`;
+  return `${fmt(a)} → ${fmt(b)} · ${days} дн.`;
+}
+function startOfDayLocal(d) {
+  const x = new Date(d);
+  x.setHours(0,0,0,0);
+  return x.getTime();
+}
+function applyPreset(name) {
+  const now = new Date();
+  let from, to;
+  const todayStart = startOfDayLocal(now);
+  const tomorrowStart = todayStart + 86400000;
+  switch (name) {
+    case 'today':
+      from = todayStart;       to = tomorrowStart; break;
+    case '7d':
+      from = todayStart - 6*86400000;  to = tomorrowStart; break;
+    case '30d':
+      from = todayStart - 29*86400000; to = tomorrowStart; break;
+    case 'this_month':
+      from = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+      to   = new Date(now.getFullYear(), now.getMonth()+1, 1).getTime();
+      break;
+    case 'prev_month':
+      from = new Date(now.getFullYear(), now.getMonth()-1, 1).getTime();
+      to   = new Date(now.getFullYear(), now.getMonth(),   1).getTime();
+      break;
+    case 'this_year':
+      from = new Date(now.getFullYear(), 0, 1).getTime();
+      to   = new Date(now.getFullYear()+1, 0, 1).getTime();
+      break;
+    default:
+      from = todayStart - 29*86400000; to = tomorrowStart;
+  }
+  reportState.from = from;
+  reportState.to   = to;
+  reportState.preset = name;
+}
+function syncDatePickers() {
+  document.getElementById('repFrom').value = fmtDateInput(reportState.from);
+  document.getElementById('repTo').value   = fmtDateInput(reportState.to - 1);
+  document.getElementById('repRangeLabel').textContent = fmtRangeHuman(reportState.from, reportState.to);
+  document.querySelectorAll('#presetChips .preset-chip').forEach(c => {
+    c.classList.toggle('is-active', c.dataset.preset === reportState.preset);
+  });
+}
+
+function fmtNum(n)  { return (n ?? 0).toLocaleString('ru-RU'); }
+function fmtDec(n)  { return n == null ? '—' : Number(n).toLocaleString('ru-RU', { maximumFractionDigits: 2 }); }
+function fmtHours(h){ return h == null ? '—' : (h < 1 ? `${Math.round(h*60)} мин` : `${h.toFixed(1)} ч`); }
+
+async function loadReportSummary() {
+  const cont = document.getElementById('repSummary');
+  cont.innerHTML = '<div class="kpi"><div class="kpi-label">Загрузка…</div></div>';
+  try {
+    const s = await MeridianAPI.reportSummary(reportState.from, reportState.to);
+    cont.innerHTML = `
+      <div class="kpi"><div class="kpi-label">Всего заявок</div><div class="kpi-value">${fmtNum(s.totalCreated)}</div></div>
+      <div class="kpi"><div class="kpi-label">Выпущено</div><div class="kpi-value released">${fmtNum(s.totalReleased)}</div></div>
+      <div class="kpi"><div class="kpi-label">В работе</div><div class="kpi-value">${fmtNum(s.totalInProgress)}</div></div>
+      <div class="kpi"><div class="kpi-label">С проблемой</div><div class="kpi-value problem">${fmtNum(s.totalProblems)}</div></div>
+      <div class="kpi"><div class="kpi-label">Сумма веса</div><div class="kpi-value">${fmtDec(s.sumWeight)} <span style="font-size:13px;color:var(--text-3);">кг</span></div></div>
+      <div class="kpi"><div class="kpi-label">Сумма штук</div><div class="kpi-value">${fmtNum(s.sumGoods)}</div></div>
+      <div class="kpi"><div class="kpi-label">Сумма (сом)</div><div class="kpi-value">${fmtDec(s.sumAmount)}</div></div>
+      <div class="kpi"><div class="kpi-label">Среднее время цикла</div><div class="kpi-value muted">${fmtHours(s.avgCycleHours)}</div></div>
+    `;
+  } catch (err) {
+    cont.innerHTML = `<div class="kpi"><div class="kpi-label">Ошибка</div><div class="kpi-value problem">${err.error || 'не удалось'}</div></div>`;
+  }
+}
+
+// Контекстные подписи к разбивкам (чтобы было понятно, ЧТО за чипы)
+const BREAKDOWN_CFG = {
+  operators: {
+    field: 'operatorLogin', label: 'Оператор',
+    breakField: 'customsBreakdown', breakLabel: 'Таможни, где работал',
+    kind: 'operator',
+    emptyKey: '— не назначен —',
+  },
+  clients: {
+    field: 'client', label: 'Клиент',
+    breakField: 'customsBreakdown', breakLabel: 'Оформлялись через таможни',
+    kind: 'client',
+    emptyKey: '— не указан —',
+  },
+  customs: {
+    field: 'customs', label: 'Таможня',
+    breakField: 'operatorsBreakdown', breakLabel: 'Работали операторы',
+    kind: 'customs',
+    emptyKey: null,
+  },
+};
+
+function renderReportTable(items, kindKey) {
+  const cfg = BREAKDOWN_CFG[kindKey];
+  const tbl = document.getElementById('reportTable');
+  if (!items.length) {
+    tbl.innerHTML = `<div class="empty-state"><h3>Нет данных за выбранный период</h3><p>Попробуйте расширить диапазон дат</p></div>`;
+    return;
+  }
+  const head = `
+    <div class="report-table-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Нажмите на строку, чтобы увидеть все заявки за период
+    </div>
+    <div class="report-table">
+      <div class="report-table-head">
+        <div>${cfg.label}</div>
+        <div>Всего</div>
+        <div>Выпущ.</div>
+        <div>В работе</div>
+        <div>Вес (кг)</div>
+        <div>Шт.</div>
+        <div>Сумма (сом)</div>
+        <div>Ср. цикл</div>
+      </div>
+  `;
+  const rows = items.map(it => {
+    const name = it[cfg.field];
+    const breakItems = it[cfg.breakField] || [];
+    const chips = breakItems.slice(0, 8).map(b =>
+      `<span class="chip-mini">${escapeHtml(b.name)}: ${b.count}</span>`
+    ).join('');
+    const hasAny = it.totalCreated > 0;
+    // value для детализации: «— не назначен —» / «— не указан —» → __none__
+    const valueForDetail = (cfg.emptyKey && name === cfg.emptyKey) ? '__none__' : name;
+    const clickAttr = hasAny
+      ? `data-detail-kind="${cfg.kind}" data-detail-value="${escapeAttr(valueForDetail)}" data-detail-label="${escapeAttr(name)}"`
+      : `data-no-trucks="1"`;
+    return `
+      <div class="report-table-row ${hasAny ? 'is-clickable' : 'is-empty'}" ${clickAttr}>
+        <div class="name">
+          <span>${escapeHtml(name)}</span>
+          ${hasAny ? '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>' : ''}
+          ${chips ? `<div class="breakdown" style="margin-top:6px;"><span class="breakdown-title">${cfg.breakLabel}:</span>${chips}</div>` : ''}
+        </div>
+        <div class="num" data-label="Всего">${fmtNum(it.totalCreated)}</div>
+        <div class="num green" data-label="Выпущено">${fmtNum(it.totalReleased)}</div>
+        <div class="num" data-label="В работе">${fmtNum(it.totalInProgress)}</div>
+        <div class="num" data-label="Вес (кг)">${fmtDec(it.sumWeight)}</div>
+        <div class="num" data-label="Штук">${fmtNum(it.sumGoods)}</div>
+        <div class="num" data-label="Сумма (сом)">${fmtDec(it.sumAmount)}</div>
+        <div class="num muted" data-label="Ср. цикл">${fmtHours(it.avgCycleHours)}</div>
+      </div>
+    `;
+  }).join('');
+  tbl.innerHTML = head + rows + '</div>';
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  })[c]);
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+async function loadActiveReport() {
+  const tbl = document.getElementById('reportTable');
+  tbl.innerHTML = '<div class="empty-state"><h3>Загрузка…</h3></div>';
+  try {
+    if (reportState.active === 'operators') {
+      const data = await MeridianAPI.reportOperators(reportState.from, reportState.to);
+      renderReportTable(data.items, 'operators');
+    } else if (reportState.active === 'clients') {
+      const data = await MeridianAPI.reportClients(reportState.from, reportState.to);
+      renderReportTable(data.items, 'clients');
+    } else if (reportState.active === 'customs') {
+      const data = await MeridianAPI.reportCustoms(reportState.from, reportState.to);
+      renderReportTable(data.items, 'customs');
+    }
+  } catch (err) {
+    tbl.innerHTML = `<div class="empty-state"><h3>Ошибка</h3><p>${err.error || 'не удалось'}</p></div>`;
+  }
+}
+
+async function refreshReports() {
+  syncDatePickers();
+  await Promise.all([loadReportSummary(), loadActiveReport()]);
+}
+
+// ============================================================
+// DETAIL slide-over: подробный список заявок выбранной сущности
+// ============================================================
+// Названия этапов — нужны для отображения текущего шага у активных
+const ADMIN_STAGES = [
+  'Ожидает обработки',
+  'Заполняется предв. инфо',
+  'Предв. инфо завершена',
+  'Прибытие на ВЗТК',
+  'ДВХ — досмотр',
+  'Декларация',
+  'Подача документов',
+  'Выпуск фуры',
+];
+function fmtTs(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function fmtDur(ms) {
+  if (ms == null || ms < 0) return '—';
+  const totalMin = Math.floor(ms / 60000);
+  const days  = Math.floor(totalMin / (60*24));
+  const hours = Math.floor((totalMin % (60*24)) / 60);
+  const mins  = totalMin % 60;
+  if (days  > 0) return `${days}д ${hours}ч`;
+  if (hours > 0) return `${hours}ч ${mins}м`;
+  return `${mins}м`;
+}
+
+function kindEyebrow(kind, value) {
+  if (kind === 'operator') return value === '__none__' ? 'Без ответственного' : 'Оператор';
+  if (kind === 'client')   return value === '__none__' ? 'Без клиента'        : 'Клиент';
+  if (kind === 'customs')  return 'Таможня';
+  return '';
+}
+
+function renderDetailStats(items) {
+  const released = items.filter(t => t.isReleased).length;
+  const active   = items.length - released;
+  const problems = items.filter(t => t.hasActiveProblem).length;
+  const sumW = items.reduce((s, t) => s + (Number(t.weight)     || 0), 0);
+  const sumG = items.reduce((s, t) => s + (Number(t.goodsCount) || 0), 0);
+  const sumA = items.reduce((s, t) => s + (Number(t.sumAmount)  || 0), 0);
+  const releasedItems = items.filter(t => t.isReleased && t.cycleHours != null);
+  const avgCycle = releasedItems.length
+    ? releasedItems.reduce((s, t) => s + t.cycleHours, 0) / releasedItems.length
+    : null;
+  return `
+    <div class="detail-stat"><div class="l">Всего</div><div class="v">${fmtNum(items.length)}</div></div>
+    <div class="detail-stat"><div class="l">Выпущено</div><div class="v green">${fmtNum(released)}</div></div>
+    <div class="detail-stat"><div class="l">В работе</div><div class="v">${fmtNum(active)}</div></div>
+    <div class="detail-stat"><div class="l">Проблемы</div><div class="v red">${fmtNum(problems)}</div></div>
+    <div class="detail-stat"><div class="l">Вес (кг)</div><div class="v">${fmtDec(sumW)}</div></div>
+    <div class="detail-stat"><div class="l">Шт.</div><div class="v">${fmtNum(sumG)}</div></div>
+    <div class="detail-stat"><div class="l">Сумма (сом)</div><div class="v">${fmtDec(sumA)}</div></div>
+    <div class="detail-stat"><div class="l">Ср. цикл</div><div class="v">${fmtHours(avgCycle)}</div></div>
+  `;
+}
+
+function renderTruckCards(items) {
+  if (!items.length) {
+    return `<div class="empty-state" style="padding:24px 0;"><h3>Нет заявок</h3></div>`;
+  }
+  return items.map(t => {
+    const klass = t.isReleased ? 'is-released' : (t.hasActiveProblem ? 'is-problem' : '');
+    const badge = t.isReleased
+      ? `<span class="badge badge-active" style="background:var(--green-soft);color:var(--green);">Выпущена</span>`
+      : (t.hasActiveProblem
+          ? `<span class="badge badge-inactive" style="background:var(--red-soft);color:var(--red);">Проблема</span>`
+          : `<span class="badge badge-active">В работе</span>`);
+    const stageTag = !t.isReleased
+      ? `<span class="stage-tag">${ADMIN_STAGES[t.currentStageIndex] || '—'}</span>`
+      : '';
+    const dates = `
+      <div><span class="label">Создана</span><br><span class="val">${fmtTs(t.createdAt)}</span></div>
+      ${t.isReleased
+        ? `<div><span class="label">Выпущена</span><br><span class="val">${fmtTs(t.releasedAt)}</span></div>`
+        : `<div><span class="label">В работе</span><br><span class="val">${fmtDur(Date.now() - t.createdAt)}</span></div>`}
+      ${t.isReleased && t.cycleHours != null
+        ? `<div><span class="label">Цикл</span><br><span class="val">${fmtHours(t.cycleHours)}</span></div>`
+        : ''}
+    `;
+    const data = `
+      <div><span class="label">Клиент</span><br><span class="val ${t.client ? '' : 'empty'}">${escapeHtml(t.client || 'не указан')}</span></div>
+      <div><span class="label">Таможня</span><br><span class="val">${escapeHtml(t.customs || '—')}</span></div>
+      <div><span class="label">Оператор</span><br><span class="val ${t.assignedOperatorLogin ? '' : 'empty'}">${escapeHtml(t.assignedOperatorLogin || 'не назначен')}</span></div>
+      <div><span class="label">Товаров</span><br><span class="val ${t.goodsCount != null ? '' : 'empty'}">${t.goodsCount != null ? t.goodsCount + ' шт.' : '—'}</span></div>
+      <div><span class="label">Вес</span><br><span class="val ${t.weight != null ? '' : 'empty'}">${t.weight != null ? fmtDec(t.weight) + ' кг' : '—'}</span></div>
+      <div><span class="label">Сумма</span><br><span class="val ${t.sumAmount != null ? '' : 'empty'}">${t.sumAmount != null ? fmtDec(t.sumAmount) + ' сом' : '—'}</span></div>
+    `;
+    return `
+      <div class="truck-detail-card ${klass}">
+        <div class="row1">
+          <span class="number">${escapeHtml(t.number)}</span>
+          <span class="tid">${escapeHtml(t.id)}</span>
+          ${badge}
+          ${stageTag}
+        </div>
+        <div class="meta-row">${data}${dates}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function openTruckDetail(kind, value, label) {
+  const backdrop = document.getElementById('detailBackdrop');
+  const panel    = document.getElementById('detailPanel');
+  document.getElementById('detailEyebrow').textContent = kindEyebrow(kind, value);
+  document.getElementById('detailTitle').textContent   = label || '—';
+  document.getElementById('detailCount').textContent   = 'Загрузка…';
+  document.getElementById('detailStats').innerHTML     = '';
+  document.getElementById('detailBody').innerHTML      = '<div style="text-align:center;color:var(--text-3);padding:24px;">Загрузка заявок…</div>';
+  backdrop.classList.add('is-open');
+  panel.classList.add('is-open');
+  panel.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  try {
+    const data = await MeridianAPI.reportTrucks(reportState.from, reportState.to, kind, value);
+    const items = data.items || [];
+    document.getElementById('detailCount').textContent =
+      `${items.length} заявок · ${fmtRangeHuman(reportState.from, reportState.to)}`;
+    document.getElementById('detailStats').innerHTML = renderDetailStats(items);
+    document.getElementById('detailBody').innerHTML  = renderTruckCards(items);
+  } catch (err) {
+    document.getElementById('detailBody').innerHTML =
+      `<div style="text-align:center;color:var(--red);padding:24px;">${escapeHtml(err.error || 'Ошибка загрузки')}</div>`;
+  }
+}
+
+function closeTruckDetail() {
+  document.getElementById('detailBackdrop').classList.remove('is-open');
+  const panel = document.getElementById('detailPanel');
+  panel.classList.remove('is-open');
+  panel.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+// Делегирование кликов в таблице отчётов
+document.addEventListener('click', (e) => {
+  const row = e.target.closest('.report-table-row.is-clickable');
+  if (row) {
+    openTruckDetail(row.dataset.detailKind, row.dataset.detailValue, row.dataset.detailLabel);
+    return;
+  }
+  if (e.target.closest('[data-close-detail]')) {
+    closeTruckDetail();
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('detailPanel').classList.contains('is-open')) {
+    closeTruckDetail();
+  }
+});
+
+function initReports() {
+  applyPreset('30d');
+  syncDatePickers();
+
+  document.querySelectorAll('#presetChips .preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => { applyPreset(chip.dataset.preset); refreshReports(); });
+  });
+  // Кастомные даты — сбрасывают пресет в null
+  const onCustomDate = () => {
+    const fromStr = document.getElementById('repFrom').value;
+    const toStr   = document.getElementById('repTo').value;
+    if (!fromStr || !toStr) return;
+    const [fy, fm, fd] = fromStr.split('-').map(Number);
+    const [ty, tm, td] = toStr.split('-').map(Number);
+    const from = new Date(fy, fm-1, fd, 0, 0, 0, 0).getTime();
+    const to   = new Date(ty, tm-1, td, 0, 0, 0, 0).getTime() + 86400000;
+    if (to <= from) { showToast('«По» должно быть не раньше «С»', 'error'); return; }
+    reportState.from = from; reportState.to = to; reportState.preset = null;
+    refreshReports();
+  };
+  document.getElementById('repFrom').addEventListener('change', onCustomDate);
+  document.getElementById('repTo').addEventListener('change', onCustomDate);
+
+  document.querySelectorAll('.report-pill').forEach(p => {
+    p.addEventListener('click', () => {
+      document.querySelectorAll('.report-pill').forEach(x => x.classList.toggle('is-active', x === p));
+      reportState.active = p.dataset.report;
+      loadActiveReport();
+    });
+  });
+}
+
+// ============================================================
+// BOOTSTRAP — пользователь, страницы, роли и users из API
+// ============================================================
+async function bootstrap() {
+  try {
+    const me = await MeridianAPI.me();
+    const nameEl = document.getElementById('userName');
+    const avEl   = document.getElementById('userAvatar');
+    const roleEl = document.getElementById('userHeaderRole');
+    if (nameEl) nameEl.textContent = me.login;
+    if (avEl)   avEl.textContent   = (me.login || '?').slice(0, 2).toUpperCase();
+    if (roleEl) roleEl.textContent = me.role_name || 'Администратор';
+  } catch (e) {}
+
+  const lbtn = document.getElementById('logoutBtn');
+  if (lbtn) lbtn.addEventListener('click', async () => {
+    try { await MeridianAPI.logout(); } catch (e) {}
+    location.href = '/login';
+  });
+
+  try {
+    const [pgs, rs, us] = await Promise.all([
+      MeridianAPI.listPages(),
+      MeridianAPI.listRoles(),
+      MeridianAPI.listUsers(),
+    ]);
+    if (Array.isArray(pgs)) PAGES = pgs;
+    roles = Array.isArray(rs) ? rs : [];
+    users = Array.isArray(us) ? us : [];
+  } catch (e) {
+    showToast(e.error || 'Не удалось загрузить данные', 'error');
+  }
+
+  renderAll();
+  initReports();
+}
+
+// Подгрузка отчётов только при первом открытии вкладки «Отчёты» (ленивая)
+let _reportsLoaded = false;
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    if (t.dataset.tab === 'reports' && !_reportsLoaded) {
+      _reportsLoaded = true;
+      refreshReports();
+    }
+  });
+});
+
+bootstrap();
+</script>
+
+</body>
+</html>
