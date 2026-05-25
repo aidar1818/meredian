@@ -1,6 +1,6 @@
 {
   "name": "meridian",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ОсОО Меридиан — таможенный представитель: заявки, роли, пользователи",
   "main": "server.js",
   "scripts": {
