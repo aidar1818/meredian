@@ -15,12 +15,20 @@ function signToken(user) {
   );
 }
 
-function setSessionCookie(res, token) {
-  const isProd = process.env.NODE_ENV === 'production';
+function setSessionCookie(req, res, token) {
+  // Флаг Secure ставим только если соединение реально HTTPS — иначе
+  // браузер выкидывает cookie на HTTP-домене, и редирект после логина
+  // приводит обратно на /login. На проде с TLS-терминацией на прокси
+  // (Nginx/Cloudflare/Load Balancer) учитывается X-Forwarded-Proto,
+  // если в server.js включён `app.set('trust proxy', 1)`.
+  const isHttps = req.secure
+    || req.headers['x-forwarded-proto'] === 'https'
+    || process.env.COOKIE_SECURE === 'true';   // ручное переопределение
+
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: isProd,
-    sameSite: 'strict',
+    secure: isHttps,
+    sameSite: 'lax',  // 'lax' безопасно для top-level навигации после login
     path: '/',
     maxAge: 365 * 24 * 60 * 60 * 1000,
   });

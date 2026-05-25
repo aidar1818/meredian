@@ -97,7 +97,7 @@ router.post('/login', (req, res) => {
   const redirect = pickRedirectPage(pages);
 
   const token = signToken(user);
-  setSessionCookie(res, token);
+  setSessionCookie(req, res, token);
 
   return res.json({
     user_id: user.id,
